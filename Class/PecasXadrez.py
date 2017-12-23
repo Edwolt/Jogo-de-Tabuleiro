@@ -110,6 +110,40 @@ class Torre:
 
     def get_movimentos(self, tabuleiro, posicao):
         res = tabuleiro_vazio()
+        linha, coluna = posicao
+        print(posicao)
+        for i in range(linha + 1, 8):
+            if tabuleiro[i][coluna] is None:
+                res[i][coluna] = True
+                print(i, coluna)
+            else:
+                res[i][coluna] = tabuleiro[i][coluna].cor != self.cor
+                break
+
+        for i in range(linha - 1, -1, -1):
+            if tabuleiro[i][coluna] is None:
+                res[i][coluna] = True
+                print(i, coluna)
+            else:
+                res[i][coluna] = tabuleiro[i][coluna].cor != self.cor
+                break
+
+        for i in range(coluna + 1, 8):
+            if tabuleiro[linha][i] is None:
+                res[linha][i] = True
+                print(linha, i)
+            else:
+                res[linha][i] = tabuleiro[linha][i].cor != self.cor
+                break
+
+        for i in range(coluna - 1, -1, -1):
+            if tabuleiro[linha][i] is None:
+                res[linha][i] = True
+                print(linha, i)
+            else:
+                res[linha][i] = tabuleiro[linha][i].cor != self.cor
+                break
+
         return res
 
 
