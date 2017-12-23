@@ -179,8 +179,11 @@ class Peao:
                 res[i][coluna] = tabuleiro[i][coluna] is None
 
         if self.enpassant:
-            i, j = self.enpassant[1]
-            print(f'enpassant = {self.enpassant}')
-            res[i][j] = True
+            new_linha, new_coluna = self.enpassant[2]
+
+            # Se os Peaos estiverem um do lado do outro
+            if new_linha == linha and (new_coluna + 1 == coluna or new_coluna == coluna - 1):
+                pas_linha, pas_coluna = self.enpassant[1]
+                res[pas_linha][pas_coluna] = True
 
         return res
