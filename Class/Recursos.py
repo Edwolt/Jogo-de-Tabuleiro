@@ -23,22 +23,22 @@ class Recursos:
 
     @config.getter
     def config(self):
-        return self.config
+        return self.__config
 
     @config.setter
     def config(self, value):
         if value:
             import importlib
-            self.config = importlib.import_module(f'Pacotes.Xadrez.Config.{value}')
+            self.__config = importlib.import_module(f'Pacotes.Xadrez.Config.{value}')
 
     def __init__(self, jogo, pacote, config=None):
         self.__pacote = pacote
         self.jogo = jogo
         self.recursos = self.get_recurso()
-        self.config = None
+        self.__config = None
         if config:
             import importlib
-            self.config = importlib.import_module(f'Pacotes.Xadrez.Config.{config}')
+            self.__config = importlib.import_module(f'Pacotes.Xadrez.Config.{config}')
 
     def get_recurso(self, return_value=True):
         recursos = dict()
@@ -88,9 +88,9 @@ class Recursos:
         return img_cor
 
     # grad = [[X, X, X], [X, X, X]]
-    def gerar_rescursos(self, grad1, grad2):
+    def gerar_recursos(self, grad1, grad2):
         for peca in nome_pecas():
-            img = cv2.imread(f'Pacotes/{self.pacote}/{self.jogo}/{peca}.png', cv2.IMREAD_UNCHANGED)
+            img = cv2.imread(f'Pacotes/{self.jogo}/Imagens/{self.pacote}/{peca}.png', cv2.IMREAD_UNCHANGED)
             # img = gerar_imagem(f'Pacotes/{pacote}/{peca}.png', grad1[0], grad1[1])
             branco = self.gerar_imagem(img, grad1[0], grad1[1])
 
