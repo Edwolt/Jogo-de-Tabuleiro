@@ -57,8 +57,8 @@ class Tela:
             'click': lambda i, j: self.config['click'](self.cores, i, j),
             'titulo': lambda: self.config['titulo'](self.xadrez.vez)
         }
-        if self.recursos.cor and self.recursos.cor.cor:
-            self.set_cores(**self.recursos.cor.cor)
+        if self.recursos.config and self.recursos.config.cor:
+            self.set_cores(**self.recursos.config.cor)
             print(self.cores)
 
     def novo_jogo(self):

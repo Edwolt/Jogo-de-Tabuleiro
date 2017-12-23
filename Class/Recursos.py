@@ -19,30 +19,26 @@ class Recursos:
         self.recursos = self.get_recurso()
         pass
 
-    cor = property()
+    config = property()
 
-    @cor.getter
-    def cor(self):
-        return self.__cor
+    @config.getter
+    def config(self):
+        return self.config
 
-    @cor.setter
-    def cor(self, value):
+    @config.setter
+    def config(self, value):
         if value:
-            exec(f'''
-            import Pacotes.Xadrez.Cor.{value} as module_cor
-            self.__cor = module_cor
-            print('executado')
-            ''')
+            import importlib
+            self.config = importlib.import_module(f'Pacotes.Xadrez.Config.{value}')
 
-    def __init__(self, jogo, pacote, cor=None):
+    def __init__(self, jogo, pacote, config=None):
         self.__pacote = pacote
         self.jogo = jogo
         self.recursos = self.get_recurso()
-        self.__cor = None
-        if cor:
+        self.config = None
+        if config:
             import importlib
-            self.__cor = importlib.import_module(f'Pacotes.Xadrez.Cor.{cor}')
-            print(self.__cor)
+            self.config = importlib.import_module(f'Pacotes.Xadrez.Config.{config}')
 
     def get_recurso(self, return_value=True):
         recursos = dict()
