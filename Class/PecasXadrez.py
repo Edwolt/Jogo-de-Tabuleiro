@@ -120,7 +120,7 @@ class Peao:
     def enpassant(self):
         return self.__enpassant
 
-    # possicao = [linha, coluna]
+    # posicao = [linha, coluna]
     # Retorna [posicao inicial, posicao por que passou, posicao final]
     @enpassant.setter
     def enpassant(self, value):

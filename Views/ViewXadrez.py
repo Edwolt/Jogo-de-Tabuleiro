@@ -73,15 +73,16 @@ class Tela:
 
     def __on_click(self, event):
         if event.button == 1:
-            self.recolorir_tabuleiro()
             i = int(event.pos[0] / self.quad_size)
             j = int(event.pos[1] / self.quad_size)
-
             x, y = self.__click
+
+            self.xadrez.movimentar_peca([x, y], [i, j])
+            self.recolorir_tabuleiro()
+
             self.__click = i, j
             self.tabuleiro[x][y].fill(self.__config['quadrado'](x, y))
             self.tabuleiro[i][j].fill(self.__config['click'](i, j))
-            self.xadrez.movimentar_peca([x, y], [i, j])
             if self.xadrez.tabuleiro[i][j]:
                 movimentos = self.xadrez.get_movimentos(i, j)
                 for i, line in enumerate(movimentos):
