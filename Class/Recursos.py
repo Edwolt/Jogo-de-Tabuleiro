@@ -6,11 +6,6 @@ from Class.PecasXadrez import nome_pecas
 
 
 class Recursos:
-    def __init__(self, pacote, jogo):
-        self.__pacote = pacote
-        self.jogo = jogo
-        self.recursos = self.get_recurso()
-
     pacote = property()
 
     @pacote.getter
@@ -24,11 +19,39 @@ class Recursos:
         self.recursos = self.get_recurso()
         pass
 
+    cor = property()
+
+    @cor.getter
+    def cor(self):
+        return self.__cor
+
+    @cor.setter
+    def cor(self, value):
+        if value:
+            exec(f'''
+            import Pacotes.Xadrez.Cor.{value} as module_cor
+            self.__cor = module_cor
+            print('executado')
+            ''')
+
+    def __init__(self, jogo, pacote, cor=None):
+        self.__pacote = pacote
+        self.jogo = jogo
+        self.recursos = self.get_recurso()
+        self.__cor = None
+        if cor:
+            import importlib
+            self.__cor = importlib.import_module(f'Pacotes.Xadrez.Cor.{cor}')
+            print(self.__cor)
+
     def get_recurso(self, return_value=True):
         recursos = dict()
         for nome, caminho in self.get_caminhos():
             recursos.__setitem__(nome, pygame.image.load(f'{caminho}.png'))
-        return recursos
+        if return_value:
+            return recursos
+        else:
+            self.recursos = recursos
 
     # retorna todos os caminhos necessarios -> [[nome, caminho],[nome, caminho], ... ]
     def get_caminhos(self):

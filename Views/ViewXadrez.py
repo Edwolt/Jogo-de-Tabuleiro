@@ -5,6 +5,18 @@ from Class.Xadrez import Xadrez
 
 
 class Tela:
+    pacote_img = property()
+
+    @pacote_img.setter
+    def pacote_img(self, value):
+        self.recursos.pacote = value
+
+    pacote_cor = property()
+
+    @pacote_cor.setter
+    def pacote_cor(self, value):
+        self.recursos.cores = value
+
     @property
     def quad(self):
         return pygame.Surface([self.quad_size, self.quad_size])
@@ -13,12 +25,12 @@ class Tela:
     def rect(self):
         return pygame.Rect([0, 0], [self.quad_size, self.quad_size])
 
-    def __init__(self, size=800, framerate=60, pacote='Default'):
+    def __init__(self, size=800, framerate=60, pacote_img='Default', pacote_cor=None):
         pygame.init()
         self.screen = pygame.display.set_mode([size, size])
 
         self.xadrez = Xadrez()
-        self.recursos = Recursos(pacote, 'Xadrez')
+        self.recursos = Recursos('Xadrez', pacote_img, pacote_cor)
         self.__clock = pygame.time.Clock()
 
         self.tabuleiro = None
@@ -26,7 +38,7 @@ class Tela:
         self.framerate = framerate
         self.quad_size = size / 8
         self.cores = dict()
-        self.set_config(
+        self.set_cores(
             branco=[255, 255, 255],
             preto=[0, 0, 0],
             click=[255, 0, 0],
@@ -45,6 +57,9 @@ class Tela:
             'click': lambda i, j: self.config['click'](self.cores, i, j),
             'titulo': lambda: self.config['titulo'](self.xadrez.vez)
         }
+        if self.recursos.cor and self.recursos.cor.cor:
+            self.set_cores(**self.recursos.cor.cor)
+            print(self.cores)
 
     def novo_jogo(self):
         self.xadrez.reposicionar_pecas()
@@ -134,7 +149,7 @@ class Tela:
         pygame.display.set_caption(self.__config['titulo']())
         pygame.display.flip()
 
-    def set_config(self, *args, **kwargs):
+    def set_cores(self, *args, **kwargs):
         try:
             kwargs['branco'] = args[0]
             kwargs['preto'] = args[1]
@@ -144,9 +159,16 @@ class Tela:
             pass
         self.cores.update(**kwargs)
 
-    def del_config(self, *args):
+    def del_cores(self, *args):
         if args:
             for key in args:
                 self.cores.pop(key)
         else:
             self.cores.clear()
+
+    def set_config(self, **kwargs):
+        for i in kwargs:
+            if i not in ['quadrado', 'movimento', 'click', 'titulo']:
+                raise KeyError(i)
+
+        self.config.update(**kwargs)
