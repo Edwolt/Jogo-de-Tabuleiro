@@ -184,12 +184,8 @@ class Peao:
             if self.enpassant and new_posicao == self.enpassant[1]:
                 res = self.enpassant[2]
                 self.enpassant = None
-                print(f'res = {res}')
-                print('Res')
                 return res
-            print('True')
             return True
-        print('False')
         return False
 
     def get_movimentos(self, tabuleiro, posicao):
