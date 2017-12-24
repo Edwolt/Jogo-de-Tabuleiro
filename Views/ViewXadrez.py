@@ -178,7 +178,9 @@ class Tela:
     def set_config(self, **kwargs):
         for i in kwargs:
             if i not in list(self.__config):
-                raise KeyError()
-        if 'captura' not in list(kwargs):
+                raise KeyError(i)
+        try:
+            kwargs['captura']
+        except KeyError:
             kwargs['captura'] = kwargs['movimento']
         self.config.update(**kwargs)

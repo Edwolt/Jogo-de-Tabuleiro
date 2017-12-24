@@ -202,11 +202,11 @@ class Peao:
 
             j = coluna + 1
             if 0 <= j < 8:
-                res[i][j] = tabuleiro[i][j] is not None
+                res[i][j] = tabuleiro[i][j] is not None and self.cor != tabuleiro[i][j].cor
 
             j = coluna - 1
             if 0 <= j < 8:
-                res[i][j] = tabuleiro[i][j] is not None
+                res[i][j] = tabuleiro[i][j] is not None and self.cor != tabuleiro[i][j].cor
 
             i = linha + d * 2
             if 0 <= i < 8 and not self.movimentou and ultimo:

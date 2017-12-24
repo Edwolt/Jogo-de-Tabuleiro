@@ -24,6 +24,6 @@ x, p1, p2 = t = nomes[random(0, len(nomes) - 1)]
 config = {
     'movimento': lambda cor, i, j: cor['movimento0'] if (i + j) % 2 else cor['movimento1'],
     'click': lambda cor, i, j: cor['click0'] if (i + j) % 2 else cor['click1'],
-    'captur': lambda cor, i, j: cor['captura0'] if (i + j) % 2 else cor['captura1'],
+    'captura': lambda cor, i, j: cor['captura0'] if (i + j) % 2 else cor['captura1'],
     'titulo': lambda vez: x + ' : ' + (p1 if vez else p2)
 }
