@@ -47,19 +47,25 @@ class Tela:
 
         self.config = {
             'quadrado': lambda cores, i, j: cores['branco'] if (i + j) % 2 == 0 else self.cores['preto'],
-            'movimento': lambda cores, i, j: cores['movimento'],
             'click': lambda cores, i, j: cores['click'],
+            'movimento': lambda cores, i, j: cores['movimento'],
+            'captura': lambda cores, i, j: self.config['movimento'](cores, i, j),
             'titulo': lambda vez: 'Xadrez : ' + ('Branco' if vez else 'Preto')
         }
         self.__config = {
             'quadrado': lambda i, j: self.config['quadrado'](self.cores, i, j),
-            'movimento': lambda i, j: self.config['movimento'](self.cores, i, j),
             'click': lambda i, j: self.config['click'](self.cores, i, j),
+            'movimento': lambda i, j: self.config['movimento'](self.cores, i, j),
+            'captura': lambda i, j: self.config['captura'](self.cores, i, j),
             'titulo': lambda: self.config['titulo'](self.xadrez.vez)
         }
-        if self.recursos.config and self.recursos.config.cor:
-            self.set_cores(**self.recursos.config.cor)
-            print(self.cores)
+        if self.recursos.config and self.recursos.config.cores:
+            if self.recursos.config.del_cores:
+                self.del_cores()
+            self.set_cores(**self.recursos.config.cores)
+
+        if self.recursos.config and self.recursos.config.config:
+            self.set_config(**self.recursos.config.config)
 
     def novo_jogo(self):
         self.xadrez.reposicionar_pecas()
@@ -88,22 +94,25 @@ class Tela:
 
     def __on_click(self, event):
         if event.button == 1:
-            i = int(event.pos[0] / self.quad_size)
-            j = int(event.pos[1] / self.quad_size)
+            m = int(event.pos[0] / self.quad_size)
+            n = int(event.pos[1] / self.quad_size)
             x, y = self.__click
 
-            self.xadrez.movimentar_peca([x, y], [i, j])
+            self.xadrez.movimentar_peca([x, y], [m, n])
             self.recolorir_tabuleiro()
 
-            self.__click = i, j
+            self.__click = m, n
             self.tabuleiro[x][y].fill(self.__config['quadrado'](x, y))
-            self.tabuleiro[i][j].fill(self.__config['click'](i, j))
-            if self.xadrez.tabuleiro[i][j]:
-                movimentos = self.xadrez.get_movimentos(i, j)
+            self.tabuleiro[m][n].fill(self.__config['click'](m, n))
+            if self.xadrez.tabuleiro[m][n]:
+                movimentos = self.xadrez.get_movimentos(m, n)
                 for i, line in enumerate(movimentos):
                     for j, b in enumerate(line):
                         if b:
-                            self.tabuleiro[i][j].fill(self.__config['movimento'](i, j))
+                            if self.xadrez.tabuleiro[i][j]:
+                                self.tabuleiro[i][j].fill(self.__config['captura'](i, j))
+                            else:
+                                self.tabuleiro[i][j].fill(self.__config['movimento'](i, j))
             self.blit_all()
             self.blit_all()
         if event.button == 3:
@@ -168,7 +177,8 @@ class Tela:
 
     def set_config(self, **kwargs):
         for i in kwargs:
-            if i not in ['quadrado', 'movimento', 'click', 'titulo']:
-                raise KeyError(i)
-
+            if i not in list(self.__config):
+                raise KeyError()
+        if 'captura' not in list(kwargs):
+            kwargs['captura'] = kwargs['movimento']
         self.config.update(**kwargs)

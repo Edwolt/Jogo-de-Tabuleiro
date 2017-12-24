@@ -31,7 +31,7 @@ class Recursos:
             import importlib
             self.__config = importlib.import_module(f'Pacotes.Xadrez.Config.{value}')
 
-    def __init__(self, jogo, pacote, config=None):
+    def __init__(self, jogo, pacote, config):
         self.__pacote = pacote
         self.jogo = jogo
         self.recursos = self.get_recurso()
