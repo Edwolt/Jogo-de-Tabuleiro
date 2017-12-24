@@ -94,9 +94,11 @@ class Xadrez:
                     self.vez = not self.vez
                     # Se for um movimento especial como o enpassant:
                     if isinstance(movimentavel, list) or isinstance(movimentavel, tuple):
-                        print('parabén pelo enpassant')
-                        self.posicionar_peca(None, movimentavel)
-                        return movimentavel
+                        acao, comando = movimentavel
+                        if acao == 'enpassant':
+                            self.posicionar_peca(None, comando)
+                        elif acao == 'promocao':
+                            self.posicionar_peca(Rainha(self.vez), comando)
 
     def get_movimentos(self, linha, coluna):
         peca = self.tabuleiro[linha][coluna]
@@ -104,11 +106,29 @@ class Xadrez:
             # Se a peca que movimentou for um Peao e ela ainda não tivesse movimentado:
             if isinstance(peca, Peao) and peca.movimentou:
                 peca.enpassant = self.jogadas[len(self.jogadas) - 1]
+
             movimentos = peca.get_movimentos(
                 self.__tabuleiro,
                 self.tornar_posicao_logica([linha, coluna]),
             )
+            movimentos = self.add_movimento_especial(linha, coluna, movimentos)
         else:
             movimentos = [[False]]
 
         return self.tornar_matriz_legivel(movimentos)
+
+    def add_movimento_especial(self, linha, coluna, movimentos):
+        res = tabuleiro_vazio()
+        if isinstance(self.tabuleiro[linha][coluna], Peao):
+            # TODO En passant
+            # TODO Promoção
+            pass
+        if isinstance(self.tabuleiro[linha][coluna], Peao):
+            # TODO Rock
+            pass
+
+        for i in range(8):
+            for j in range(8):
+                res[i][j] = movimentos[i][j] or res[i][j]
+
+        return res

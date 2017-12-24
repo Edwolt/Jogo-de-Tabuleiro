@@ -56,7 +56,80 @@ class Rainha:
         return False
 
     def get_movimentos(self, tabuleiro, posicao):
+        linha, coluna = posicao
+
         res = tabuleiro_vazio()
+
+        # Horizontal e Vertical
+        for i in range(linha + 1, 8):
+            if tabuleiro[i][coluna] is None:
+                res[i][coluna] = True
+            else:
+                res[i][coluna] = self.cor != tabuleiro[i][coluna].cor
+                break
+
+        for i in range(linha - 1, -1, -1):
+            if tabuleiro[i][coluna] is None:
+                res[i][coluna] = True
+            else:
+                res[i][coluna] = self.cor != tabuleiro[i][coluna].cor
+                break
+
+        for i in range(coluna + 1, 8):
+            if tabuleiro[linha][i] is None:
+                res[linha][i] = True
+            else:
+                res[linha][i] = self.cor != tabuleiro[linha][i].cor
+                break
+
+        for i in range(coluna - 1, -1, -1):
+            if tabuleiro[linha][i] is None:
+                res[linha][i] = True
+            else:
+                res[linha][i] = self.cor != tabuleiro[linha][i].cor
+                break
+
+        # Diagonais
+        i, j = posicao
+        while i < 7 and j < 7:
+            i += 1
+            j += 1
+            if tabuleiro[i][j] is None:
+                res[i][j] = True
+            else:
+                res[i][j] = self.cor != tabuleiro[i][j].cor
+                break
+
+        i, j = posicao
+        while i > 0 and j < 7:
+            i -= 1
+            j += 1
+            if tabuleiro[i][j] is None:
+                res[i][j] = True
+            else:
+                res[i][j] = self.cor != tabuleiro[i][j].cor
+                break
+
+        i, j = posicao
+        while i < 7 and j > 0:
+            i += 1
+            j -= 1
+            if tabuleiro[i][j] is None:
+                res[i][j] = True
+            else:
+                res[i][j] = self.cor != tabuleiro[i][j].cor
+                break
+
+        i, j = posicao
+        while i > 0 and j > 0:
+            i -= 1
+            j -= 1
+            if tabuleiro[i][j] is None:
+                res[i][j] = True
+            else:
+                res[i][j] = self.cor != tabuleiro[i][j].cor
+                break
+
         return res
 
 
@@ -74,6 +147,47 @@ class Bispo:
 
     def get_movimentos(self, tabuleiro, posicao):
         res = tabuleiro_vazio()
+
+        i, j = posicao
+        while i < 7 and j < 7:
+            i += 1
+            j += 1
+            if tabuleiro[i][j] is None:
+                res[i][j] = True
+            else:
+                res[i][j] = self.cor != tabuleiro[i][j].cor
+                break
+
+        i, j = posicao
+        while i > 0 and j < 7:
+            i -= 1
+            j += 1
+            if tabuleiro[i][j] is None:
+                res[i][j] = True
+            else:
+                res[i][j] = self.cor != tabuleiro[i][j].cor
+                break
+
+        i, j = posicao
+        while i < 7 and j > 0:
+            i += 1
+            j -= 1
+            if tabuleiro[i][j] is None:
+                res[i][j] = True
+            else:
+                res[i][j] = self.cor != tabuleiro[i][j].cor
+                break
+
+        i, j = posicao
+        while i > 0 and j > 0:
+            i -= 1
+            j -= 1
+            if tabuleiro[i][j] is None:
+                res[i][j] = True
+            else:
+                res[i][j] = self.cor != tabuleiro[i][j].cor
+                break
+
         return res
 
 
@@ -109,39 +223,35 @@ class Torre:
         return False
 
     def get_movimentos(self, tabuleiro, posicao):
-        res = tabuleiro_vazio()
         linha, coluna = posicao
-        print(posicao)
+
+        res = tabuleiro_vazio()
         for i in range(linha + 1, 8):
             if tabuleiro[i][coluna] is None:
                 res[i][coluna] = True
-                print(i, coluna)
             else:
-                res[i][coluna] = tabuleiro[i][coluna].cor != self.cor
+                res[i][coluna] = self.cor != tabuleiro[i][coluna].cor
                 break
 
         for i in range(linha - 1, -1, -1):
             if tabuleiro[i][coluna] is None:
                 res[i][coluna] = True
-                print(i, coluna)
             else:
-                res[i][coluna] = tabuleiro[i][coluna].cor != self.cor
+                res[i][coluna] = self.cor != tabuleiro[i][coluna].cor
                 break
 
         for i in range(coluna + 1, 8):
             if tabuleiro[linha][i] is None:
                 res[linha][i] = True
-                print(linha, i)
             else:
-                res[linha][i] = tabuleiro[linha][i].cor != self.cor
+                res[linha][i] = self.cor != tabuleiro[linha][i].cor
                 break
 
         for i in range(coluna - 1, -1, -1):
             if tabuleiro[linha][i] is None:
                 res[linha][i] = True
-                print(linha, i)
             else:
-                res[linha][i] = tabuleiro[linha][i].cor != self.cor
+                res[linha][i] = self.cor != tabuleiro[linha][i].cor
                 break
 
         return res
@@ -181,21 +291,30 @@ class Peao:
         movimentos = self.get_movimentos(tabuleiro, old_posicao)[new_linha][new_coluna]
         if movimentos:
             self.movimentou = True
+
+            # Movimento Enpassat
             if self.enpassant and new_posicao == self.enpassant[1]:
-                res = self.enpassant[2]
+                res = 'enpassant', self.enpassant[2]
                 self.enpassant = None
                 return res
+
+            # Movimento Possivel
             return True
+        # Movimento impossivel
         return False
 
     def get_movimentos(self, tabuleiro, posicao):
         linha, coluna = posicao
+
         res = tabuleiro_vazio()
         d = 1 if self.cor else -1
         i = linha + d
+
+        # Movimento Normal
         if 0 <= linha + d < 8:
             ultimo = res[i][coluna] = tabuleiro[i][coluna] is None
 
+            # Capturas
             j = coluna + 1
             if 0 <= j < 8:
                 res[i][j] = tabuleiro[i][j] is not None and self.cor != tabuleiro[i][j].cor
@@ -204,10 +323,12 @@ class Peao:
             if 0 <= j < 8:
                 res[i][j] = tabuleiro[i][j] is not None and self.cor != tabuleiro[i][j].cor
 
+            # Movimento Especial de andar por duas casas
             i = linha + d * 2
             if 0 <= i < 8 and not self.movimentou and ultimo:
                 res[i][coluna] = tabuleiro[i][coluna] is None
 
+        # Movimento en passant
         if self.enpassant:
             new_linha, new_coluna = self.enpassant[2]
 
