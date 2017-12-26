@@ -332,9 +332,11 @@ class Peao:
         if self.enpassant:
             new_linha, new_coluna = self.enpassant[2]
 
-            # Se os Peaos estiverem um do lado do outro
-            if new_linha == linha and (new_coluna + 1 == coluna or new_coluna == coluna - 1):
-                pas_linha, pas_coluna = self.enpassant[1]
-                res[pas_linha][pas_coluna] = True
+            # Se a peca for um Peao
+            if isinstance(tabuleiro[new_linha][new_coluna], Peao):
+                # Se os Peaos estiverem um do lado do outro
+                if new_linha == linha and (new_coluna == coluna + 1 or new_coluna == coluna - 1):
+                    pas_linha, pas_coluna = self.enpassant[1]
+                    res[pas_linha][pas_coluna] = True
 
         return res

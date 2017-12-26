@@ -111,24 +111,7 @@ class Xadrez:
                 self.__tabuleiro,
                 self.tornar_posicao_logica([linha, coluna]),
             )
-            movimentos = self.add_movimento_especial(linha, coluna, movimentos)
         else:
             movimentos = [[False]]
 
         return self.tornar_matriz_legivel(movimentos)
-
-    def add_movimento_especial(self, linha, coluna, movimentos):
-        res = tabuleiro_vazio()
-        if isinstance(self.tabuleiro[linha][coluna], Peao):
-            # TODO En passant
-            # TODO Promoção
-            pass
-        if isinstance(self.tabuleiro[linha][coluna], Peao):
-            # TODO Rock
-            pass
-
-        for i in range(8):
-            for j in range(8):
-                res[i][j] = movimentos[i][j] or res[i][j]
-
-        return res
