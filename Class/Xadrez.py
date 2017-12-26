@@ -97,7 +97,7 @@ class Xadrez:
                         if acao == 'enpassant':
                             self.posicionar_peca(None, comando)
                         elif acao == 'promocao':
-                            return 'promocao'
+                            return 'promocao'  # Isso também impede que a vez seja alterada
 
                     self.vez = not self.vez
 
@@ -113,7 +113,7 @@ class Xadrez:
         else:
             peca = Peao(self.vez)
         self.posicionar_peca(peca, self.tornar_posicao_logica(posicao))
-        self.vez = not self.vez
+        self.vez = not self.vez  # Altera a vez que não foi alterada no metodo movimentar_peca
 
     def get_movimentos(self, linha, coluna):
         peca = self.tabuleiro[linha][coluna]

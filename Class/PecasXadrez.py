@@ -40,6 +40,44 @@ class Rei:
 
     def get_movimentos(self, tabuleiro, posicao):
         res = tabuleiro_vazio()
+        linha, coluna = posicao
+
+        i = linha + 1
+        if -1 < i < 8:
+            j = coluna
+            if -1 < j < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+            j = coluna + 1
+            if -1 < j < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+            j = coluna - 1
+            if -1 < j < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+        i = linha - 1
+        if -1 < i < 8:
+            j = coluna
+            if -1 < j < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+            j = coluna + 1
+            if -1 < j < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+            j = coluna - 1
+            if -1 < j < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+        j = coluna + 1
+        if -1 < j < 8:
+            res[linha][j] = tabuleiro[linha][j] is None or tabuleiro[linha][j].cor != self.cor
+
+        j = coluna - 1
+        if -1 < j < 8:
+            res[linha][j] = tabuleiro[linha][j] is None or tabuleiro[linha][j].cor != self.cor
+
         return res
 
 
