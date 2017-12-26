@@ -42,6 +42,7 @@ class Rei:
         res = tabuleiro_vazio()
         linha, coluna = posicao
 
+        # Três casas acima do rei
         i = linha + 1
         if -1 < i < 8:
             j = coluna
@@ -56,6 +57,7 @@ class Rei:
             if -1 < j < 8:
                 res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
 
+        # Três casas abaixo do rei
         i = linha - 1
         if -1 < i < 8:
             j = coluna
@@ -70,6 +72,7 @@ class Rei:
             if -1 < j < 8:
                 res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
 
+        # Duas casas ao lado do rei
         j = coluna + 1
         if -1 < j < 8:
             res[linha][j] = tabuleiro[linha][j] is None or tabuleiro[linha][j].cor != self.cor
@@ -243,6 +246,52 @@ class Cavalo:
 
     def get_movimentos(self, tabuleiro, posicao):
         res = tabuleiro_vazio()
+        linha, coluna = posicao
+
+        # Cima
+        i = linha + 2
+        if -1 < i < 8:
+            j = coluna + 1
+            if -1 < j < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+            j = coluna - 1
+            if -1 < j < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+        # Direita
+        j = coluna + 2
+        if -1 < j < 8:
+            i = linha + 1
+            if -1 < i < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+            i = linha - 1
+            if -1 < i < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+        # Baixo
+        i = linha - 2
+        if -1 < i < 8:
+            j = coluna + 1
+            if -1 < j < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+            j = coluna - 1
+            if -1 < j < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+        # Esquerda
+        j = coluna - 2
+        if -1 < j < 8:
+            i = linha + 1
+            if -1 < i < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
+            i = linha - 1
+            if -1 < i < 8:
+                res[i][j] = tabuleiro[i][j] is None or tabuleiro[i][j].cor != self.cor
+
         return res
 
 
