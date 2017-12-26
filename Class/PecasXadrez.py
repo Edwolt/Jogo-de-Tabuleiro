@@ -292,8 +292,13 @@ class Peao:
         if movimentos:
             self.movimentou = True
 
+            # Promoção
+            promocao = 7 if self.cor else 0
+            if new_linha == promocao:
+                return 'promocao', new_posicao
+
             # Movimento Enpassat
-            if self.enpassant and new_posicao == self.enpassant[1]:
+            elif self.enpassant and new_posicao == self.enpassant[1]:
                 res = 'enpassant', self.enpassant[2]
                 self.enpassant = None
                 return res

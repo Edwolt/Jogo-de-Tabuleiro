@@ -94,31 +94,74 @@ class Tela:
 
     def __on_click(self, event):
         if event.button == 1:
+
+            if self.__click[0] is None:
+                self.__on_click_promocao(event)
+
             m = int(event.pos[0] / self.quad_size)
             n = int(event.pos[1] / self.quad_size)
             x, y = self.__click
 
-            self.xadrez.movimentar_peca([x, y], [m, n])
-            self.recolorir_tabuleiro()
-
+            aux = self.xadrez.movimentar_peca([x, y], [m, n])
             self.__click = m, n
-            self.tabuleiro[x][y].fill(self.__config['quadrado'](x, y))
-            self.tabuleiro[m][n].fill(self.__config['click'](m, n))
-            if self.xadrez.tabuleiro[m][n]:
-                movimentos = self.xadrez.get_movimentos(m, n)
-                for i, line in enumerate(movimentos):
-                    for j, b in enumerate(line):
-                        if b:
-                            if self.xadrez.tabuleiro[i][j]:
-                                self.tabuleiro[i][j].fill(self.__config['captura'](i, j))
-                            else:
-                                self.tabuleiro[i][j].fill(self.__config['movimento'](i, j))
-            self.blit_all()
-            self.blit_all()
+
+            if aux is None:
+                self.recolorir_tabuleiro()
+
+                self.tabuleiro[x][y].fill(self.__config['quadrado'](x, y))
+                self.tabuleiro[m][n].fill(self.__config['click'](m, n))
+                if self.xadrez.tabuleiro[m][n]:
+                    movimentos = self.xadrez.get_movimentos(m, n)
+                    for i, line in enumerate(movimentos):
+                        for j, b in enumerate(line):
+                            if b:
+                                if self.xadrez.tabuleiro[i][j]:
+                                    self.tabuleiro[i][j].fill(self.__config['captura'](i, j))
+                                else:
+                                    self.tabuleiro[i][j].fill(self.__config['movimento'](i, j))
+                self.blit_all()
+            elif aux == 'promocao':
+                self.__on_click_promocao_ecolha(event)
+
         if event.button == 3:
             self.blit_all()
             pass
             # opções
+
+    def __on_click_promocao(self, event):
+        from Class.PecasXadrez import nome_pecas
+        nomes = [i for i in nome_pecas() if i not in ['Rei', 'Peao']]
+        _, m, n = self.__click
+        i = int(event.pos[0] / self.tmp_size)
+        j = int(event.pos[1] / self.tmp_size)
+        del self.tmp_size
+        peca_por_linha = 2  # 4 Pecas ** (1/2) para formar um quadrado
+        nome = nomes[i * peca_por_linha + j]
+        self.xadrez.promocao(nome, [m, n])
+        self.__click = m, n
+
+    def __on_click_promocao_ecolha(self, event):
+        from Class.PecasXadrez import nome_pecas
+        nomes = [i for i in nome_pecas() if i not in ['Rei', 'Peao']]
+        peca_por_linha = 2  # 4 Pecas ** (1/2) para formar um quadrado
+        size = self.quad_size * 8 / 2
+        self.tmp_size = size
+        for i in range(peca_por_linha):
+            for j in range(peca_por_linha):
+                quad = pygame.Surface([size, size])
+                quad.fill(self.__config['quadrado'](i, j))
+                key = '{}_{}'.format(
+                    nomes[int(i * peca_por_linha + j)], 'branco' if self.xadrez.vez else 'preto'
+                )
+                img = self.recursos.recursos[key]
+                rect = pygame.Rect([0, 0], [size, size])
+                img = pygame.transform.scale(img, rect.size)
+                quad.blit(img, rect)
+                self.screen.blit(quad, [size * i, size * j])
+                pygame.display.flip()
+        aux = [None]
+        aux.extend(self.__click)
+        self.__click = aux
 
     def criar_tabuleiro(self):
         tabuleiro = [None] * 8

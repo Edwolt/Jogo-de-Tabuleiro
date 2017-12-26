@@ -91,14 +91,29 @@ class Xadrez:
                     self.posicionar_peca(None, l_old_posicao)
                     self.jogadas.append([l_old_posicao, l_new_posicao])
                     print(f'{l_old_posicao} -> {l_new_posicao}')
-                    self.vez = not self.vez
                     # Se for um movimento especial como o enpassant:
-                    if isinstance(movimentavel, list) or isinstance(movimentavel, tuple):
+                    if isinstance(movimentavel, tuple) or isinstance(movimentavel, list):
                         acao, comando = movimentavel
                         if acao == 'enpassant':
                             self.posicionar_peca(None, comando)
                         elif acao == 'promocao':
-                            self.posicionar_peca(Rainha(self.vez), comando)
+                            return 'promocao'
+
+                    self.vez = not self.vez
+
+    def promocao(self, nome, posicao):
+        if nome == 'Rainha':
+            peca = Rainha(self.vez)
+        elif nome == 'Torre':
+            peca = Torre(self.vez)
+        elif nome == 'Bispo':
+            peca = Bispo(self.vez)
+        elif nome == 'Cavalo':
+            peca = Cavalo(self.vez)
+        else:
+            peca = Peao(self.vez)
+        self.posicionar_peca(peca, self.tornar_posicao_logica(posicao))
+        self.vez = not self.vez
 
     def get_movimentos(self, linha, coluna):
         peca = self.tabuleiro[linha][coluna]
