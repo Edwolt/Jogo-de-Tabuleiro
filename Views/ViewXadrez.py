@@ -164,9 +164,7 @@ class Tela:
         self.__click = aux
 
     def criar_tabuleiro(self):
-        tabuleiro = [None] * 8
-        for i in range(len(tabuleiro)):
-            tabuleiro[i] = [None] * 8
+        tabuleiro = [[None] * 8 for _ in range(8)]
 
         for i, line in enumerate(tabuleiro):
             for j in range(len(line)):

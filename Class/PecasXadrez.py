@@ -18,10 +18,7 @@ def nome_pecas():
 
 
 def tabuleiro_vazio():
-    tabuleiro = [None] * 8
-    for i in range(len(tabuleiro)):
-        tabuleiro[i] = [False] * 8
-    return tabuleiro
+    return [[False] * 8 for _ in range(8)]
 
 
 class Rei:

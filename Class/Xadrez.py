@@ -14,10 +14,7 @@ class Xadrez:
         self.vez = True
         self.jogadas = list()
 
-        tabuleiro = [None] * 8
-        for i, _ in enumerate(tabuleiro):
-            tabuleiro[i] = [None] * 8
-        self.__tabuleiro = tabuleiro
+        self.__tabuleiro = [[None] * 8 for _ in range(8)]
 
         self.reposicionar_pecas()
 
@@ -25,10 +22,7 @@ class Xadrez:
         self.tornar_posicao_logica = lambda pos: [7 - pos[1], pos[0]]
 
     def reposicionar_pecas(self):
-        tabuleiro = [None] * 8
-        for i, _ in enumerate(tabuleiro):
-            tabuleiro[i] = [None] * 8
-        self.__tabuleiro = tabuleiro
+        self.__tabuleiro = [[None] * 8 for _ in range(8)]
 
         self.posicionar_peca(Torre(self.__branco), [0, 0])
         self.posicionar_peca(Cavalo(self.__branco), [0, 1])
@@ -67,6 +61,7 @@ class Xadrez:
         self.posicionar_peca(Peao(self.__preto), [6, 7])
 
         self.vez = True
+        self.jogadas = list()
 
     # Posicao = '1A', '2C', etc,
     def posicionar_peca(self, peca, posicao):
@@ -91,13 +86,13 @@ class Xadrez:
                     self.posicionar_peca(None, l_old_posicao)
                     self.jogadas.append([l_old_posicao, l_new_posicao])
                     print(f'{l_old_posicao} -> {l_new_posicao}')
-                    # Se for um movimento especial como o enpassant:
+                    # Se for uma promoção ou o en passant:
                     if isinstance(movimentavel, tuple) or isinstance(movimentavel, list):
                         acao, comando = movimentavel
                         if acao == 'enpassant':
                             self.posicionar_peca(None, comando)
                         elif acao == 'promocao':
-                            return 'promocao'  # Isso também impede que a vez seja alterada
+                            return 'promocao'  # A vez não foi alterada
 
                     self.vez = not self.vez
 
@@ -127,6 +122,6 @@ class Xadrez:
                 self.tornar_posicao_logica([linha, coluna]),
             )
         else:
-            movimentos = [[False]]
+            movimentos = [[False] * 8 for _ in range(8)]
 
         return self.tornar_matriz_legivel(movimentos)
