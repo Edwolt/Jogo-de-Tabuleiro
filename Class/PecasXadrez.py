@@ -400,21 +400,21 @@ class Peao:
         i = linha + d
 
         # Movimento Normal
-        if 0 <= linha + d < 8:
+        if -1 < linha + d < 8:
             ultimo = res[i][coluna] = tabuleiro[i][coluna] is None
 
             # Capturas
             j = coluna + 1
-            if 0 <= j < 8:
+            if -1 < j < 8:
                 res[i][j] = tabuleiro[i][j] is not None and self.cor != tabuleiro[i][j].cor
 
             j = coluna - 1
-            if 0 <= j < 8:
+            if -1 < j < 8:
                 res[i][j] = tabuleiro[i][j] is not None and self.cor != tabuleiro[i][j].cor
 
             # Movimento Especial de andar por duas casas
             i = linha + d * 2
-            if 0 <= i < 8 and not self.movimentou and ultimo:
+            if -1 < i < 8 and not self.movimentou and ultimo:
                 res[i][coluna] = tabuleiro[i][coluna] is None
 
         # Movimento en passant
