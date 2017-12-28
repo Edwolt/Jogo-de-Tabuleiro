@@ -24,55 +24,50 @@ class Xadrez:
     def reposicionar_pecas(self):
         self.__tabuleiro = [[None] * 8 for _ in range(8)]
 
-        self.posicionar_peca(Torre(self.__branco), [0, 0])
-        self.posicionar_peca(Cavalo(self.__branco), [0, 1])
-        self.posicionar_peca(Bispo(self.__branco), [0, 2])
-        self.posicionar_peca(Rainha(self.__branco), [0, 3])
-        self.posicionar_peca(Rei(self.__branco), [0, 4])
-        self.posicionar_peca(Bispo(self.__branco), [0, 5])
-        self.posicionar_peca(Cavalo(self.__branco), [0, 6])
-        self.posicionar_peca(Torre(self.__branco), [0, 7])
+        self.__tabuleiro[0][0] = Torre(self.__branco)
+        self.__tabuleiro[0][1] = Cavalo(self.__branco)
+        self.__tabuleiro[0][2] = Bispo(self.__branco)
+        self.__tabuleiro[0][3] = Rainha(self.__branco)
+        self.__tabuleiro[0][4] = Rei(self.__branco)
+        self.__tabuleiro[0][5] = Bispo(self.__branco)
+        self.__tabuleiro[0][6] = Cavalo(self.__branco)
+        self.__tabuleiro[0][7] = Torre(self.__branco)
 
-        self.posicionar_peca(Peao(self.__branco), [1, 0])
-        self.posicionar_peca(Peao(self.__branco), [1, 1])
-        self.posicionar_peca(Peao(self.__branco), [1, 2])
-        self.posicionar_peca(Peao(self.__branco), [1, 3])
-        self.posicionar_peca(Peao(self.__branco), [1, 4])
-        self.posicionar_peca(Peao(self.__branco), [1, 5])
-        self.posicionar_peca(Peao(self.__branco), [1, 6])
-        self.posicionar_peca(Peao(self.__branco), [1, 7])
+        self.__tabuleiro[1][0] = Peao(self.__branco)
+        self.__tabuleiro[1][1] = Peao(self.__branco)
+        self.__tabuleiro[1][2] = Peao(self.__branco)
+        self.__tabuleiro[1][3] = Peao(self.__branco)
+        self.__tabuleiro[1][4] = Peao(self.__branco)
+        self.__tabuleiro[1][5] = Peao(self.__branco)
+        self.__tabuleiro[1][6] = Peao(self.__branco)
+        self.__tabuleiro[1][7] = Peao(self.__branco)
 
-        self.posicionar_peca(Torre(self.__preto), [7, 0])
-        self.posicionar_peca(Cavalo(self.__preto), [7, 1])
-        self.posicionar_peca(Bispo(self.__preto), [7, 2])
-        self.posicionar_peca(Rainha(self.__preto), [7, 3])
-        self.posicionar_peca(Rei(self.__preto), [7, 4])
-        self.posicionar_peca(Bispo(self.__preto), [7, 5])
-        self.posicionar_peca(Cavalo(self.__preto), [7, 6])
-        self.posicionar_peca(Torre(self.__preto), [7, 7])
+        self.__tabuleiro[7][0] = Torre(self.__preto)
+        self.__tabuleiro[7][1] = Cavalo(self.__preto)
+        self.__tabuleiro[7][2] = Bispo(self.__preto)
+        self.__tabuleiro[7][3] = Rainha(self.__preto)
+        self.__tabuleiro[7][4] = Rei(self.__preto)
+        self.__tabuleiro[7][5] = Bispo(self.__preto)
+        self.__tabuleiro[7][6] = Cavalo(self.__preto)
+        self.__tabuleiro[7][7] = Torre(self.__preto)
 
-        self.posicionar_peca(Peao(self.__preto), [6, 0])
-        self.posicionar_peca(Peao(self.__preto), [6, 1])
-        self.posicionar_peca(Peao(self.__preto), [6, 2])
-        self.posicionar_peca(Peao(self.__preto), [6, 3])
-        self.posicionar_peca(Peao(self.__preto), [6, 4])
-        self.posicionar_peca(Peao(self.__preto), [6, 5])
-        self.posicionar_peca(Peao(self.__preto), [6, 6])
-        self.posicionar_peca(Peao(self.__preto), [6, 7])
+        self.__tabuleiro[6][0] = Peao(self.__preto)
+        self.__tabuleiro[6][1] = Peao(self.__preto)
+        self.__tabuleiro[6][2] = Peao(self.__preto)
+        self.__tabuleiro[6][3] = Peao(self.__preto)
+        self.__tabuleiro[6][4] = Peao(self.__preto)
+        self.__tabuleiro[6][5] = Peao(self.__preto)
+        self.__tabuleiro[6][6] = Peao(self.__preto)
+        self.__tabuleiro[6][7] = Peao(self.__preto)
 
         self.vez = True
         self.jogadas = list()
-
-    # Posicao = '1A', '2C', etc,
-    def posicionar_peca(self, peca, posicao):
-        linha, coluna = posicao
-        self.__tabuleiro[linha][coluna] = peca
 
     # posicao = [i, j]
     def movimentar_peca(self, old_posicao, new_posicao):
         old_linha, old_coluna = old_posicao
         l_old_linha, l_old_coluna = l_old_posicao = self.tornar_posicao_logica(old_posicao)
-        l_new_posicao = self.tornar_posicao_logica(new_posicao)
+        l_new_linha, l_new_coluna = l_new_posicao = self.tornar_posicao_logica(new_posicao)
         peca = self.tabuleiro[old_linha][old_coluna]
         if peca:
             if peca.cor == self.vez:
@@ -82,15 +77,17 @@ class Xadrez:
                     self.tornar_posicao_logica(new_posicao)
                 )
                 if movimentavel:
-                    self.posicionar_peca(self.__tabuleiro[l_old_linha][l_old_coluna], l_new_posicao)
-                    self.posicionar_peca(None, l_old_posicao)
+                    self.__tabuleiro[l_new_linha][l_new_coluna] = self.__tabuleiro[l_old_linha][l_old_coluna]
+                    self.__tabuleiro[l_old_linha][l_old_coluna] = None
                     self.jogadas.append([l_old_posicao, l_new_posicao])
                     print(f'{l_old_posicao} -> {l_new_posicao}')
                     # Se for uma promoção ou o en passant:
                     if isinstance(movimentavel, tuple) or isinstance(movimentavel, list):
                         acao, comando = movimentavel
                         if acao == 'enpassant':
-                            self.posicionar_peca(None, comando)
+                            i, j = comando
+                            print('en passant')
+                            self.__tabuleiro[i][j] = None
                         elif acao == 'promocao':
                             return 'promocao'  # A vez não foi alterada
 
@@ -107,7 +104,8 @@ class Xadrez:
             peca = Cavalo(self.vez)
         else:
             peca = Peao(self.vez)
-        self.posicionar_peca(peca, self.tornar_posicao_logica(posicao))
+        i, j = self.tornar_posicao_logica(posicao)
+        self.__tabuleiro[i][j] = peca
         self.vez = not self.vez  # Altera a vez que não foi alterada no metodo movimentar_peca
 
     def get_movimentos(self, linha, coluna):
