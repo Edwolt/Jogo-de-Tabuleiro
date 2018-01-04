@@ -25,12 +25,12 @@ class Tela:
     def rect(self):
         return pygame.Rect([0, 0], [self.quad_size, self.quad_size])
 
-    def __init__(self, size=800, framerate=60, pacote_img='Default', pacote_cor=None):
+    def __init__(self, size=800, framerate=60, pacote_cor=None):
         pygame.init()
         self.screen = pygame.display.set_mode([size, size])
 
         self.xadrez = Xadrez()
-        self.recursos = Recursos('Xadrez', pacote_img, pacote_cor)
+        self.recursos = Recursos('Xadrez', config=pacote_cor)
         self.__clock = pygame.time.Clock()
 
         self.tabuleiro = None
