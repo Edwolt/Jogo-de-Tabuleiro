@@ -49,7 +49,7 @@ class GeradorRecursos(Recursos):
         self.pacote = pacote
         self.size = 216
 
-    # cor = [X, X, X]
+    # cor = [R, G, B]
     def gerar_paleta(self, cor1, cor2):
         r = numpy.linspace(cor1[0], cor2[0], 256)
         g = numpy.linspace(cor1[1], cor2[1], 256)
@@ -65,7 +65,7 @@ class GeradorRecursos(Recursos):
 
         return numpy.dstack((b, g, r))
 
-    # cor = [X, X, X]
+    # cor = [R, G, B]
     def gerar_imagem(self, img, cor1, cor2):
         cor1.append(255)
         cor2.append(255)
@@ -79,7 +79,8 @@ class GeradorRecursos(Recursos):
         img_cor = numpy.uint8(img_cor)
         return img_cor
 
-    # grad = [[X, X, X], [X, X, X]]
+    # grad = [cor1, cor2]
+    # grad = [[R, G, B], [R, G, B]]
     def gerar_recursos(self, grad1, grad2):
         for peca in nome_pecas():
             img = cv2.imread(f'Pacotes/{self.jogo}/Imagens/{self.pacote}/{peca}.png', cv2.IMREAD_UNCHANGED)
