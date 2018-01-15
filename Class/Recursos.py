@@ -6,19 +6,6 @@ from Class.PecasXadrez import nome_pecas
 
 
 class Recursos:
-    pacote = property()
-
-    @pacote.getter
-    def pacote(self):
-        return self.__pacote
-        pass
-
-    @pacote.setter
-    def pacote(self, value):
-        self.pacote = value
-        self.recursos = self.get_recurso()
-        pass
-
     config = property()
 
     @config.getter
@@ -56,9 +43,9 @@ class Recursos:
             yield f'{nome}_preto', f'Recursos/{self.jogo}/{nome}_preto'
 
 
-class GeradorRecursos:
+class GeradorRecursos(Recursos):
     def __init__(self, jogo, pacote):
-        self.jogo = jogo
+        Recursos.__init__(self, jogo, None)
         self.pacote = pacote
         self.size = 216
 
