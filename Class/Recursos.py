@@ -32,8 +32,7 @@ class Recursos:
             self.__config = importlib.import_module(f'Pacotes.Xadrez.Config.{value}')
 
     # Requer pacote para atualizar recursos
-    def __init__(self, jogo, pacote=None, config=None):
-        self.__pacote = pacote
+    def __init__(self, jogo, config=None):
         self.jogo = jogo
         self.recursos = self.get_recurso()
         self.__config = None
@@ -56,23 +55,28 @@ class Recursos:
             yield f'{nome}_branco', f'Recursos/{self.jogo}/{nome}_branco'
             yield f'{nome}_preto', f'Recursos/{self.jogo}/{nome}_preto'
 
+
+class GeradorRecursos:
+    def __init__(self, jogo, pacote):
+        self.jogo = jogo
+        self.pacote = pacote
+        self.size = 216
+
     # cor = [X, X, X]
     def gerar_paleta(self, cor1, cor2):
         r = numpy.linspace(cor1[0], cor2[0], 256)
         g = numpy.linspace(cor1[1], cor2[1], 256)
         b = numpy.linspace(cor1[2], cor2[2], 256)
-        a = numpy.linspace(cor1[3], cor2[3], 256)
 
         r = numpy.tile(r.reshape(256, 1), 256)
         g = numpy.tile(g.reshape(256, 1), 256)
         b = numpy.tile(b.reshape(256, 1), 256)
-        a = numpy.tile(a.reshape(256, 1), 256)
 
         r = numpy.uint8(r)
         g = numpy.uint8(g)
         b = numpy.uint8(b)
-        a = numpy.uint8(a)
-        return numpy.dstack((b, g, r, a))
+
+        return numpy.dstack((b, g, r))
 
     # cor = [X, X, X]
     def gerar_imagem(self, img, cor1, cor2):
@@ -83,7 +87,7 @@ class Recursos:
         for i in range(img.shape[0]):
             for j in range(img.shape[1]):
                 pixel = img[i][j]
-                img_cor[i][j] = paleta[pixel][0][0] if not pixel[3] == 0 else pixel
+                img_cor[i][j] = [*paleta[pixel][0][0], pixel[3]]
 
         img_cor = numpy.uint8(img_cor)
         return img_cor
@@ -95,7 +99,7 @@ class Recursos:
             # img = gerar_imagem(f'Pacotes/{pacote}/{peca}.png', grad1[0], grad1[1])
             branco = self.gerar_imagem(img, grad1[0], grad1[1])
 
-            cv2.imwrite(f'Recursos/{self.jogo}/{peca}_branco.png', cv2.resize(branco, (512, 512)))
+            cv2.imwrite(f'Recursos/{self.jogo}/{peca}_branco.png', cv2.resize(branco, (self.size, self.size)))
             # img = gerar_imagem(f'Pacotes/{pacote}/{peca}.png', grad2[0], grad2[1])
             preto = self.gerar_imagem(img, grad2[0], grad2[1])
-            cv2.imwrite(f'Recursos/{self.jogo}/{peca}_preto.png', cv2.resize(preto, (512, 512)))
+            cv2.imwrite(f'Recursos/{self.jogo}/{peca}_preto.png', cv2.resize(preto, (self.size, self.size)))

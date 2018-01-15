@@ -1,4 +1,4 @@
-from Class.Recursos import Recursos
+from Class.Recursos import GeradorRecursos
 
 # Cores Brancas
 cor1 = [100, 100, 100]
@@ -10,6 +10,6 @@ cor1 = [0, 0, 0]
 cor2 = [100, 100, 100]
 grad2 = [cor1, cor2]
 
-atualizar = Recursos('Xadrez', 'Default')
+atualizar = GeradorRecursos('Xadrez', 'Default')
 
 atualizar.gerar_recursos(grad1, grad2)
