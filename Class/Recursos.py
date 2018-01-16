@@ -21,7 +21,7 @@ class Recursos:
     @property
     def all_configs(self):
         import glob
-        return {i.split('\\')[1]: i for i in glob.glob(f'Pacotes/{self.jogo}/Config/*.py', )}
+        return [i.split('\\')[1][:-3] for i in glob.glob(f'Pacotes/{self.jogo}/Config/*.py', )]
 
     # Requer pacote para atualizar recursos
     def __init__(self, jogo, config=None):
