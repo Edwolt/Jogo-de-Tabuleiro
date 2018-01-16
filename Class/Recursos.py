@@ -18,6 +18,11 @@ class Recursos:
             import importlib
             self.__config = importlib.import_module(f'Pacotes.Xadrez.Config.{value}')
 
+    @property
+    def all_configs(self):
+        import glob
+        return {i.split('\\')[1]: i for i in glob.glob(f'Pacotes/{self.jogo}/Config/*.py', )}
+
     # Requer pacote para atualizar recursos
     def __init__(self, jogo, config=None):
         self.jogo = jogo
@@ -47,7 +52,7 @@ class GeradorRecursos(Recursos):
     def __init__(self, jogo, pacote):
         Recursos.__init__(self, jogo, None)
         self.pacote = pacote
-        self.size = 216
+        self.size = 512
 
     # cor = [R, G, B]
     def gerar_paleta(self, cor1, cor2):

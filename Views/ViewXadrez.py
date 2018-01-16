@@ -50,14 +50,15 @@ class Tela:
             'click': lambda cores, i, j: cores['click'],
             'movimento': lambda cores, i, j: cores['movimento'],
             'captura': lambda cores, i, j: self.config['movimento'](cores, i, j),
-            'titulo': lambda vez: 'Xadrez : ' + ('Branco' if vez else 'Preto')
+            'titulo': lambda vez: 'Xadrez : ' + ('Branco' if vez else 'Preto'),
         }
         self.__config = {
             'quadrado': lambda i, j: self.config['quadrado'](self.cores, i, j),
             'click': lambda i, j: self.config['click'](self.cores, i, j),
             'movimento': lambda i, j: self.config['movimento'](self.cores, i, j),
             'captura': lambda i, j: self.config['captura'](self.cores, i, j),
-            'titulo': lambda: self.config['titulo'](self.xadrez.vez)
+            'titulo': lambda: self.config['titulo'](self.xadrez.vez),
+            'fonte': pygame.font.Font('Pacotes/Xadrez/Fontes/Consola.ttf', 50)
         }
         if self.recursos.config and self.recursos.config.cores:
             if self.recursos.config.del_cores:
@@ -87,10 +88,86 @@ class Tela:
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    quit(0)
+                    self.menu()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.__on_click(event)
+
+    def menu(self, menus=None, opcoes=None):
+        all_configs = self.recursos.all_configs
+        all_configs.update(Voltar=None)
+        if menus is None:
+            menus = ['Menu']
+
+        if opcoes is None:
+            opcoes = {
+                'Mudar Config': all_configs,
+                'Voltar': None,
+                'Fechar': quit
+            }
+        _, height = self.__config['fonte'].size('')
+
+        nivel = 0
+
+        def escrever_opcoes():
+            nonlocal nivel
+            self.screen.fill([0, 0, 0])
+
+            y = 0
+            for nivel, menu in enumerate(menus):
+                texto = self.__config['fonte'].render('  ' * nivel + menu, 0, [255, 255, 255])
+                self.screen.blit(texto, [0, y])
+                y += height
+
+            for i, opcao in enumerate(opcoes):
+                if i == selecionado:
+                    texto = self.__config['fonte'].render('  ' * nivel + '> ' + opcao, 0, [255, 255, 255])
+                    self.screen.blit(texto, [0, y])
+                else:
+                    texto = self.__config['fonte'].render('  ' * nivel + '  ' + opcao, 0, [255, 255, 255])
+                    self.screen.blit(texto, [0, y])
+                y += height
+            pygame.display.flip()
+
+        in_loop = True
+        selecionado = 0
+        escrever_opcoes()
+        while in_loop:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    quit(0)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        in_loop = False
+                        if nivel > 0:
+                            return True
+                    if event.key == pygame.K_UP:
+                        if selecionado > 0:
+                            selecionado -= 1
+                            escrever_opcoes()
+                    if event.key == pygame.K_DOWN:
+                        if selecionado < len(opcoes) - 1:
+                            selecionado += 1
+                            escrever_opcoes()
+                    if event.key == pygame.K_RETURN:
+                        valor = list(opcoes.values())[selecionado]
+                        if callable(valor):
+                            valor()
+                        if isinstance(valor, dict):
+                            key_selecionada = list(opcoes.keys())[selecionado]
+                            menus.append(key_selecionada)
+                            if self.menu(menus, valor):
+                                if nivel < 0:
+                                    return True
+                                else:
+                                    in_loop = False
+                            escrever_opcoes()
+                            pygame.display.flip()
+                        if valor is None:
+                            in_loop = False
+
+        self.blit_all()
+        pygame.display.flip()
 
     def __on_click(self, event):
         if event.button == 1:
@@ -124,7 +201,7 @@ class Tela:
                 self.__on_click_promocao_ecolha(event)
 
         if event.button == 3:
-            self.blit_all()
+            self.menu()
             pass
             # opções
 

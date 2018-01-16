@@ -13,9 +13,12 @@ class Save:
         self.dados = dict()
         self.keys = lambda: self.dados.keys()
 
-    def salvar(self, *kwargs):
+    def salvar(self, dados=None):
         file = open(self.path, 'w')
-        json.dump(self.dados, file)
+        if dados:
+            json.dump(dados, file)
+        else:
+            json.dump(self.dados, file)
 
     def carregar(self):
         try:
