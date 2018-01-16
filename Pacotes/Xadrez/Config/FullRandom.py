@@ -2,15 +2,35 @@ from random import randint as random
 
 del_cores = True
 
+
+def cor():
+    return [random(0, 255), random(0, 255), random(0, 255)]
+
+
+def to_str(iterable):
+    res = ''
+    for i in iterable:
+        res += i
+    return res
+
+
 cores = {
-    'branco': [random(0, 255), random(0, 255), random(0, 255)],
-    'preto': [random(0, 255), random(0, 255), random(0, 255)],
-    'click0': [random(0, 255), random(0, 255), random(0, 255)],
-    'click1': [random(0, 255), random(0, 255), random(0, 255)],
-    'movimento0': [random(0, 255), random(0, 255), random(0, 255)],
-    'movimento1': [random(0, 255), random(0, 255), random(0, 255)],
-    'captura0': [random(0, 255), random(0, 255), random(0, 255)],
-    'captura1': [random(0, 255), random(0, 255), random(0, 255)]
+    'branco': cor(),
+    'preto': cor(),
+    'click0': cor(),
+    'click1': cor(),
+    'movimento0': cor(),
+    'movimento1': cor(),
+    'captura0': cor(),
+    'captura1': cor(),
+    'Menu': cor(),
+    'MenuConfigs': cor(),
+    'MenuImagens': cor(),
+    'MenuFontes': cor(),
+    'FonteMenu': cor(),
+    'FonteMenuConfigs': cor(),
+    'FonteMenuImagens': cor(),
+    'FonteMenuFontes': cor()
 }
 
 nomes = (
@@ -25,5 +45,7 @@ config = {
     'movimento': lambda cor, i, j: cor['movimento0'] if (i + j) % 2 else cor['movimento1'],
     'click': lambda cor, i, j: cor['click0'] if (i + j) % 2 else cor['click1'],
     'captura': lambda cor, i, j: cor['captura0'] if (i + j) % 2 else cor['captura1'],
-    'titulo': lambda vez: x + ' : ' + (p1 if vez else p2)
+    'titulo': lambda vez: x + ' : ' + (p1 if vez else p2),
+    'menu': lambda cor, menu: cor[to_str(menu)],
+    'cor_fonte': lambda cor, menu: cor['Fonte' + to_str(menu)]
 }

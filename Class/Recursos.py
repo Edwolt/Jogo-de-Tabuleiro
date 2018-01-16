@@ -23,6 +23,11 @@ class Recursos:
         import glob
         return [i.split('\\')[1][:-3] for i in glob.glob(f'Pacotes/{self.jogo}/Config/*.py', )]
 
+    @property
+    def all_imagens(self):
+        import os
+        return os.listdir('Pacotes/Xadrez/Imagens')
+
     # Requer pacote para atualizar recursos
     def __init__(self, jogo, config=None):
         self.jogo = jogo

@@ -20,7 +20,9 @@ class Tela:
             branco=[255, 255, 255],
             preto=[0, 0, 0],
             click=[255, 0, 0],
-            movimento=[0, 255, 255]
+            movimento=[0, 255, 255],
+            menu=[0, 0, 0],
+            cor_fonte=[255, 255, 255]
         )
         self.config = {
             'quadrado': lambda cores, i, j: cores['branco'] if (i + j) % 2 == 0 else self.cores['preto'],
@@ -28,6 +30,8 @@ class Tela:
             'movimento': lambda cores, i, j: cores['movimento'],
             'captura': lambda cores, i, j: self.config['movimento'](cores, i, j),
             'titulo': lambda vez: 'Xadrez : ' + ('Branco' if vez else 'Preto'),
+            'menu': lambda cores, menu: self.cores['menu'],
+            'cor_fonte': lambda cores, menu: self.cores['cor_fonte']
         }
         if value is not None:
             self.recursos.config = value
@@ -66,6 +70,7 @@ class Tela:
         self.framerate = framerate
         self.quad_size = size / 8
         self.cores = dict()
+        self.config = dict()
         self.pacote_config = pacote_config
 
         self.__config = {
@@ -74,7 +79,9 @@ class Tela:
             'movimento': lambda i, j: self.config['movimento'](self.cores, i, j),
             'captura': lambda i, j: self.config['captura'](self.cores, i, j),
             'titulo': lambda: self.config['titulo'](self.xadrez.vez),
-            'fonte': pygame.font.Font('Pacotes/Xadrez/Fontes/Consola.ttf', 50)
+            'fonte': pygame.font.Font('Pacotes/Xadrez/Fontes/Consola.ttf', 50),
+            'menu': lambda menu: self.config['menu'](self.cores, menu),
+            'cor_fonte': lambda menu: self.config['cor_fonte'](self.cores, menu)
         }
 
     def novo_jogo(self):
@@ -105,8 +112,8 @@ class Tela:
     def menu(self):
         opcoes = [
             'Configs',
-            'Fontes',
             'Imagens',
+            'Fontes',
             'Desfazer',
             'Voltar',
             'Sair'
@@ -117,12 +124,12 @@ class Tela:
         menus = ['Menu']
         _, height = self.__config['fonte'].size('')
 
-        def escrever_opcoes(opcoes):
-            self.screen.fill([0, 0, 0])
+        def escrever_opcoes():
+            self.screen.fill(self.__config['menu'](menus))
             y = 0
 
             for nivel, i in enumerate(menus):
-                texto = self.__config['fonte'].render('  ' * nivel + i, 0, [255, 255, 255])
+                texto = self.__config['fonte'].render('  ' * nivel + i, 0, self.__config['cor_fonte'](menus))
                 self.screen.blit(texto, [0, y])
                 y += height
 
@@ -138,13 +145,55 @@ class Tela:
                     else:
                         texto = '  ' * nivel + ('> ' if opcoes[selecionado] == opcao else '  ') + 'Novo Jogo'
 
-                reder_texto = self.__config['fonte'].render(texto, 0, [255, 255, 255])
+                reder_texto = self.__config['fonte'].render(texto, 0, self.__config['cor_fonte'](menus))
                 self.screen.blit(reder_texto, [0, y])
                 y += height
 
             pygame.display.flip()
 
-        escrever_opcoes(opcoes)
+        def escrever_opcoes1(opcoes: list):
+            self.screen.fill(self.__config['menu'](menus))
+            y = 0
+
+            for nivel, i in enumerate(menus):
+                texto = self.__config['fonte'].render('  ' * nivel + i, 0, self.__config['cor_fonte'](menus))
+                self.screen.blit(texto, [0, y])
+                y += height
+
+            for i, opcao in enumerate(opcoes):
+                if i == selecionado:
+                    texto = '  ' * nivel + '> ' + opcao
+                else:
+                    texto = '  ' * nivel + '  ' + opcao
+
+                reder_texto = self.__config['fonte'].render(texto, 0, self.__config['cor_fonte'](menus))
+                self.screen.blit(reder_texto, [0, y])
+                y += height
+
+            pygame.display.flip()
+
+        def escrever_opcoes2(opcoes: dict):
+            self.screen.fill(self.__config['menu'](menus))
+            y = 0
+
+            for nivel, i in enumerate(menus):
+                texto = self.__config['fonte'].render('  ' * nivel + i, 0, self.__config['cor_fonte'](menus))
+                self.screen.blit(texto, [0, y])
+                y += height
+
+            for i, k in enumerate(opcoes):
+                if i == selecionado:
+                    texto = '  ' * nivel + '> ' + k + str(opcoes[k])
+                else:
+                    texto = '  ' * nivel + '  ' + k + str(opcoes[k])
+
+                reder_texto = self.__config['fonte'].render(texto, 0, self.__config['cor_fonte'](menus))
+                self.screen.blit(reder_texto, [0, y])
+                y += height
+
+            pygame.display.flip()
+
+        escrever_opcoes()
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -156,33 +205,31 @@ class Tela:
                     if event.key == pygame.K_UP:
                         if selecionado > 0:
                             selecionado -= 1
-                            escrever_opcoes(opcoes)
+                            escrever_opcoes()
                     if event.key == pygame.K_DOWN:
                         if selecionado < len(opcoes) - 1:
                             selecionado += 1
-                            escrever_opcoes(opcoes)
+                            escrever_opcoes()
                     if opcoes[selecionado] == 'Desfazer':
                         if event.key == pygame.K_RIGHT:
                             if desfazer < limite_desfazer:
                                 desfazer += 1
                             else:
                                 desfazer = 0
-                            escrever_opcoes(opcoes)
+                            escrever_opcoes()
                         if event.key == pygame.K_LEFT:
                             if desfazer > 0:
                                 desfazer -= 1
                             else:
                                 desfazer = limite_desfazer
-                            escrever_opcoes(opcoes)
+                            escrever_opcoes()
                     if event.key == pygame.K_RETURN:
                         opcao = opcoes[selecionado]
                         if opcao == 'Configs':
                             selecionado = 0
-                            configs = ['Default']
-                            configs.extend(self.recursos.all_configs)
-                            configs.append('Voltar')
+                            configs = ['Default'] + self.recursos.all_configs + ['Voltar']
                             menus.append('Configs')
-                            escrever_opcoes(configs)
+                            escrever_opcoes1(configs)
 
                             in_loop = True
                             while in_loop:
@@ -196,11 +243,11 @@ class Tela:
                                         if event.key == pygame.K_UP:
                                             if selecionado > 0:
                                                 selecionado -= 1
-                                                escrever_opcoes(configs)
+                                                escrever_opcoes1(configs)
                                         if event.key == pygame.K_DOWN:
                                             if selecionado < len(configs) - 1:
                                                 selecionado += 1
-                                                escrever_opcoes(configs)
+                                                escrever_opcoes1(configs)
                                         if event.key == pygame.K_RETURN:
                                             if selecionado == 0:
                                                 self.pacote_config = None
@@ -215,12 +262,128 @@ class Tela:
                                             in_loop = False
                             menus = menus[:-1]
                             selecionado = 0
+                            escrever_opcoes1(opcoes)
+
+                        elif opcao == 'Imagens':  # TODO
+                            selecionado = 0
+                            imagens = self.recursos.all_imagens
+                            imagens.append('Voltar')
+                            menus.append('Imagens')
+                            escrever_opcoes1(imagens)
+
+                            in_loop = True
+                            while in_loop:
+                                for event in pygame.event.get():
+                                    if event.type == pygame.QUIT:
+                                        quit(0)
+                                    if event.type == pygame.KEYDOWN:
+                                        if event.key == pygame.K_ESCAPE:
+                                            self.blit_all()
+                                            return
+                                        if event.key == pygame.K_UP:
+                                            if selecionado > 0:
+                                                selecionado -= 1
+                                                escrever_opcoes1(imagens)
+                                        if event.key == pygame.K_DOWN:
+                                            if selecionado < len(imagens) - 1:
+                                                selecionado += 1
+                                                escrever_opcoes1(imagens)
+                                        if event.key == pygame.K_RETURN:
+                                            if selecionado < len(imagens) - 1:
+                                                from Class.Recursos import GeradorRecursos
+                                                pacote = imagens[selecionado]
+
+                                                cores = {
+                                                    'Branco Cor1 R: ': 100,
+                                                    'Branco Cor1 G: ': 100,
+                                                    'Branco Cor1 B: ': 100,
+                                                    'Branco Cor2 R: ': 255,
+                                                    'Branco Cor2 G: ': 255,
+                                                    'Branco Cor2 B: ': 255,
+                                                    'Preto  Cor1 R: ': 0,
+                                                    'Preto  Cor1 G: ': 0,
+                                                    'Preto  Cor1 B: ': 0,
+                                                    'Preto  Cor2 R: ': 100,
+                                                    'Preto  Cor2 G: ': 100,
+                                                    'Preto  Cor2 B: ': 100,
+                                                    'Aplicar': ''
+                                                }
+                                                escrever_opcoes2(cores)
+                                                menus.append('Cores')
+                                                in_loop1 = True
+                                                while in_loop1:
+
+                                                    for event in pygame.event.get():
+                                                        if event.type == pygame.QUIT:
+                                                            quit(0)
+                                                        if event.type == pygame.KEYDOWN:
+                                                            if event.key == pygame.K_ESCAPE:
+                                                                self.blit_all()
+                                                                return
+                                                            if event.key == pygame.K_UP:
+                                                                if selecionado > 0:
+                                                                    selecionado -= 1
+                                                                    escrever_opcoes2(cores)
+                                                            if event.key == pygame.K_DOWN:
+                                                                if selecionado < len(cores) - 1:
+                                                                    selecionado += 1
+                                                                    escrever_opcoes2(cores)
+
+                                                            if selecionado < len(opcoes) - 1:
+                                                                if event.key == pygame.K_RIGHT:
+                                                                    if desfazer < limite_desfazer:
+                                                                        desfazer += 1
+                                                                    else:
+                                                                        desfazer = 0
+                                                                    escrever_opcoes()
+                                                                if event.key == pygame.K_LEFT:
+                                                                    if desfazer > 0:
+                                                                        desfazer -= 1
+                                                                    else:
+                                                                        desfazer = limite_desfazer
+                                                                    escrever_opcoes()
+                                                            if event.key == pygame.K_RETURN:
+                                                                if selecionado < len(cores) - 1:
+                                                                    pacote = configs[selecionado]
+                                                                    self.pacote_config = pacote
+                                                                self.recolorir_tabuleiro()
+                                                                i, j = self.__click
+                                                                self.tabuleiro[i][j].fill(self.__config['click'](i, j))
+                                                                self.blit_all()
+
+                                                                in_loop1 = False
+                                                menus = menus[:-1]
+                                                selecionado = 0
+                                                escrever_opcoes(opcoes)
+
+                                                self.screen.fill(self.__config['menu'](menus))
+                                                texto = self.__config['fonte'].render(
+                                                    'Mudando Pacote', 0, self.__config['cor_fonte'](menus)
+                                                )
+                                                w, h = self.__config['fonte'].size('Mudando Pacote')
+                                                meio_tela = self.quad_size * 4  # quad_size * 8 / 2 -> screen_size / 2
+                                                meio = meio_tela - w / 2, meio_tela - h / 2
+                                                self.screen.blit(texto, meio)
+                                                pygame.display.flip()
+                                                atualizar = GeradorRecursos('Xadrez', pacote)
+                                                atualizar.gerar_recursos(
+                                                    [[245, 245, 245], [255, 255, 255]],
+                                                    [[0, 0, 0, ], [10, 10, 10, ]]
+                                                )
+                                                self.recursos.get_recurso(return_value=False)
+                                            self.recolorir_tabuleiro()
+                                            i, j = self.__click
+                                            self.tabuleiro[i][j].fill(self.__config['click'](i, j))
+                                            self.blit_all()
+
+                                            in_loop = False
+                            menus = menus[:-1]
+                            selecionado = 0
                             escrever_opcoes(opcoes)
+                            pass
 
                         elif opcao == 'Fontes':  # TODO
                             self.fonte = 'Consolas.ttf'
-                            pass
-                        elif opcao == 'Imagens':  # TODO
                             pass
                         elif opcao == 'Desfazer':
                             if 0 > desfazer > limite_desfazer:
@@ -293,7 +456,7 @@ class Tela:
         from Class.PecasXadrez import nome_pecas
         nomes = [i for i in nome_pecas() if i not in ['Rei', 'Peao']]
         peca_por_linha = 2  # 4 Pecas ** (1/2) para formar um quadrado
-        size = self.quad_size * 8 / 2
+        size = self.quad_size * 4  # quad_size * 8 / 2 -> screen_size / 2
         self.tmp_size = size
         for i in range(peca_por_linha):
             for j in range(peca_por_linha):

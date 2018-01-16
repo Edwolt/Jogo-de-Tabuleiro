@@ -2,13 +2,29 @@ from random import randint as random
 
 del_cores = True
 
+
+def gerar_cor():
+    return [random(0, 255), random(0, 255), random(0, 255)]
+
+
+def to_str(iterable):
+    res = ''
+    for i in iterable:
+        res += i
+    return res
+
+
 cores = {
-    'cor1': [random(0, 255), random(0, 255), random(0, 255)],
-    'cor2': [random(0, 255), random(0, 255), random(0, 255)],
-    'cor3': [random(0, 255), random(0, 255), random(0, 255)],
-    'click': [random(0, 255), random(0, 255), random(0, 255)],
-    'movimentopreto': [random(0, 255), random(0, 255), random(0, 255)],
-    'movimentobranco': [random(0, 255), random(0, 255), random(0, 255)]
+    'cor1': gerar_cor(),
+    'cor2': gerar_cor(),
+    'cor3': gerar_cor(),
+    'click': gerar_cor(),
+    'movimentopreto': gerar_cor(),
+    'movimentobranco': gerar_cor(),
+    'Menu': gerar_cor(),
+    'MenuConfigs': gerar_cor(),
+    'MenuImagens': gerar_cor(),
+    'MenuFontes': gerar_cor(),
 }
 
 
@@ -23,5 +39,7 @@ def quad(cores, i, j):
 
 config = {
     'movimento': lambda cor, i, j: cor['movimentopreto'] if (i + j) % 2 else cor['movimentobranco'],
-    'quadrado': quad
+    'quadrado': quad,
+    'menu': lambda cor, menu: cor[to_str(menu)],
+    'cor_fonte': lambda cor, menu: cor['MenuFontes']
 }

@@ -1,6 +1,6 @@
 from random import randint as random
 
-del_cores = True
+del_cores = False
 
 cores = {
     'preto': [random(0, 255), random(0, 255), random(0, 255)],
