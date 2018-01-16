@@ -12,7 +12,7 @@ class Xadrez:
         self.__preto = preto
         self.__branco = branco
         self.vez = True
-        self.jogadas = list()
+        self.jogadas = list()  # jogadas = [[oi, oj], [ni, nj]] ou [[i, j], acao]
 
         self.__tabuleiro = [[None] * 8 for _ in range(8)]
 
@@ -63,6 +63,32 @@ class Xadrez:
         self.vez = True
         self.jogadas = list()
 
+    def desfazer(self, num=1):
+        jogadas = self.jogadas[:-num]
+        self.reposicionar_pecas()
+        for jogada in jogadas:
+            old, new = jogada
+            old_linha, old_coluna = old
+            if isinstance(old, list):
+                new_linha, new_coluna = new
+                self.__tabuleiro[new_linha][new_coluna] = self.__tabuleiro[old_linha][old_coluna]
+                self.__tabuleiro[old_linha][old_coluna] = None
+                self.vez = not self.vez
+            else:
+                if new == 'enpassant':
+                    self.__tabuleiro[old_linha][old_coluna] = None
+                elif new == 'Rainha':
+                    self.__tabuleiro[old_linha][old_coluna] = Rainha(self.vez)
+                elif new == 'Torre':
+                    self.__tabuleiro[old_linha][old_coluna] = Torre(self.vez)
+                elif new == 'Bispo':
+                    self.__tabuleiro[old_linha][old_coluna] = Bispo(self.vez)
+                elif new == 'Cavalo':
+                    self.__tabuleiro[old_linha][old_coluna] = Cavalo(self.vez)
+                else:
+                    self.__tabuleiro[old_linha][old_coluna] = Peao(self.vez)
+        self.jogadas = jogadas
+
     # posicao = [i, j]
     def movimentar_peca(self, old_posicao, new_posicao):
         old_linha, old_coluna = old_posicao
@@ -88,6 +114,7 @@ class Xadrez:
                             i, j = comando
                             print('en passant')
                             self.__tabuleiro[i][j] = None
+                            self.jogadas.append(l_old_posicao, 'enpassant')
                         elif acao == 'promocao':
                             return 'promocao'  # A vez não foi alterada
 
@@ -106,6 +133,8 @@ class Xadrez:
             peca = Peao(self.vez)
         i, j = self.tornar_posicao_logica(posicao)
         self.__tabuleiro[i][j] = peca
+        self.jogadas.append([[i, j], nome])
+        print(f'[{i}, {j}] -> {nome}')
         self.vez = not self.vez  # Altera a vez que não foi alterada no metodo movimentar_peca
 
     def get_movimentos(self, linha, coluna):

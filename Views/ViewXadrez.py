@@ -39,6 +39,12 @@ class Tela:
             if self.recursos.config and self.recursos.config.config:
                 self.set_config(**self.recursos.config.config)
 
+    fonte = property()
+
+    @fonte.setter
+    def fonte(self, value):
+        self.__config['fonte'] = pygame.font.Font(f'Pacotes/Xadrez/Fontes/{value}', 50)
+
     @property
     def quad(self):
         return pygame.Surface([self.quad_size, self.quad_size])
@@ -99,12 +105,19 @@ class Tela:
     def menu(self):
         opcoes = [
             'Configs',
+            'Fontes',
+            'Imagens',
+            'Desfazer',
             'Voltar',
             'Sair'
         ]
+        desfazer = 0
+        limite_desfazer = len(self.xadrez.jogadas)
+        selecionado = 0
+        menus = ['Menu']
         _, height = self.__config['fonte'].size('')
 
-        def escrever_opcoes(menus, opcoes, selecionado):
+        def escrever_opcoes(opcoes):
             self.screen.fill([0, 0, 0])
             y = 0
 
@@ -115,17 +128,23 @@ class Tela:
 
             for i, opcao in enumerate(opcoes):
                 if i == selecionado:
-                    texto = self.__config['fonte'].render('  ' * nivel + '> ' + opcao, 0, [255, 255, 255])
-                    self.screen.blit(texto, [0, y])
+                    texto = '  ' * nivel + '> ' + opcao
                 else:
-                    texto = self.__config['fonte'].render('  ' * nivel + '  ' + opcao, 0, [255, 255, 255])
-                    self.screen.blit(texto, [0, y])
+                    texto = '  ' * nivel + '  ' + opcao
+
+                if opcao == 'Desfazer':
+                    if 0 < desfazer < limite_desfazer:
+                        texto += f' <{desfazer}>'
+                    else:
+                        texto = '  ' * nivel + ('> ' if opcoes[selecionado] == opcao else '  ') + 'Novo Jogo'
+
+                reder_texto = self.__config['fonte'].render(texto, 0, [255, 255, 255])
+                self.screen.blit(reder_texto, [0, y])
                 y += height
+
             pygame.display.flip()
 
-        selecionado = 0
-        menus = ['Menu']
-        escrever_opcoes(menus, opcoes, selecionado)
+        escrever_opcoes(opcoes)
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -137,19 +156,33 @@ class Tela:
                     if event.key == pygame.K_UP:
                         if selecionado > 0:
                             selecionado -= 1
-                            escrever_opcoes(menus, opcoes, selecionado)
+                            escrever_opcoes(opcoes)
                     if event.key == pygame.K_DOWN:
                         if selecionado < len(opcoes) - 1:
                             selecionado += 1
-                            escrever_opcoes(menus, opcoes, selecionado)
+                            escrever_opcoes(opcoes)
+                    if opcoes[selecionado] == 'Desfazer':
+                        if event.key == pygame.K_RIGHT:
+                            if desfazer < limite_desfazer:
+                                desfazer += 1
+                            else:
+                                desfazer = 0
+                            escrever_opcoes(opcoes)
+                        if event.key == pygame.K_LEFT:
+                            if desfazer > 0:
+                                desfazer -= 1
+                            else:
+                                desfazer = limite_desfazer
+                            escrever_opcoes(opcoes)
                     if event.key == pygame.K_RETURN:
-                        if selecionado == 0:  # Mudar Config
+                        opcao = opcoes[selecionado]
+                        if opcao == 'Configs':
                             selecionado = 0
                             configs = ['Default']
                             configs.extend(self.recursos.all_configs)
                             configs.append('Voltar')
                             menus.append('Configs')
-                            escrever_opcoes(menus, configs, selecionado)
+                            escrever_opcoes(configs)
 
                             in_loop = True
                             while in_loop:
@@ -159,40 +192,51 @@ class Tela:
                                     if event.type == pygame.KEYDOWN:
                                         if event.key == pygame.K_ESCAPE:
                                             self.blit_all()
-                                            pygame.display.flip()
                                             return
                                         if event.key == pygame.K_UP:
                                             if selecionado > 0:
                                                 selecionado -= 1
-                                                escrever_opcoes(menus, configs, selecionado)
+                                                escrever_opcoes(configs)
                                         if event.key == pygame.K_DOWN:
                                             if selecionado < len(configs) - 1:
                                                 selecionado += 1
-                                                escrever_opcoes(menus, configs, selecionado)
+                                                escrever_opcoes(configs)
                                         if event.key == pygame.K_RETURN:
                                             if selecionado == 0:
                                                 self.pacote_config = None
-                                                self.recolorir_tabuleiro()
-                                                i, j = self.__click
-                                                self.tabuleiro[i][j].fill(self.__config['click'](i, j))
-                                                self.blit_all()
                                             elif selecionado < len(configs) - 1:
                                                 pacote = configs[selecionado]
                                                 self.pacote_config = pacote
-                                                self.recolorir_tabuleiro()
-                                                i, j = self.__click
-                                                self.tabuleiro[i][j].fill(self.__config['click'](i, j))
-                                                self.blit_all()
+                                            self.recolorir_tabuleiro()
+                                            i, j = self.__click
+                                            self.tabuleiro[i][j].fill(self.__config['click'](i, j))
+                                            self.blit_all()
 
                                             in_loop = False
                             menus = menus[:-1]
                             selecionado = 0
-                            escrever_opcoes(menus, opcoes, selecionado)
+                            escrever_opcoes(opcoes)
 
-                        elif selecionado == 1:  # Voltar
+                        elif opcao == 'Fontes':  # TODO
+                            self.fonte = 'Consolas.ttf'
+                            pass
+                        elif opcao == 'Imagens':  # TODO
+                            pass
+                        elif opcao == 'Desfazer':
+                            if 0 > desfazer > limite_desfazer:
+                                self.xadrez.desfazer(desfazer)
+                            else:
+                                self.xadrez.reposicionar_pecas()
+                            self.recolorir_tabuleiro()
+                            i, j = self.__click
+                            self.tabuleiro[i][j].fill(self.__config['click'](i, j))
+                            self.blit_all()
                             self.blit_all()
                             return
-                        elif selecionado == 2:  # Sair
+                        elif opcao == 'Voltar':
+                            self.blit_all()
+                            return
+                        elif opcao == 'Sair':
                             quit(0)
                         else:
                             raise Exception('Opcao nao encontrada')

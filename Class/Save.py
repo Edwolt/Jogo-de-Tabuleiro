@@ -6,10 +6,10 @@ class Save:
 
     @jogo.setter
     def jogo(self, value):
-        self.path = f'{value}/save.json'
+        self.path = f'Recursos/{value}/save.json'
 
     def __init__(self, jogo):
-        self.path = f'{jogo}/save.json'
+        self.path = f'Recursos/{jogo}/save.json'
         self.dados = dict()
         self.keys = lambda: self.dados.keys()
 
