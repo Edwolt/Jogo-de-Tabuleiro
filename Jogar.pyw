@@ -1,7 +1,9 @@
-GAME = 'Xadrez'
+"""Inicie o Jogo"""
 
-GAME = GAME.lower()
-if GAME == 'xadrez':
+JOGO = 'Xadrez'  # Nome do jogo a ser jogado
+
+JOGO = JOGO.lower()
+if JOGO == 'xadrez':
     from Views.ViewXadrez import Tela
 
     tela = Tela(800)

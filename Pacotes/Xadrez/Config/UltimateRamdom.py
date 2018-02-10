@@ -1,10 +1,12 @@
+__author__ = 'Eduardo Souza Rocha'
+
 from random import randint as random
 
 del_cores = True
 
 
 def cor():
-    return [random(0, 255), random(0, 255), random(0, 255)]
+    return random(0, 255), random(0, 255), random(0, 255)
 
 
 def nome(vez):
@@ -14,12 +16,12 @@ def nome(vez):
 
 cores = dict()
 
-nomes = [
-    ['Xadrez', 'Branco', 'Preto'],
-    ['Jogo de Tabuleiro', 'Claro', 'Escuro'],
-    ['Chess', 'Black', 'White'],
-    ['Chess Game', 'Player 1', 'Player 2'],
-]
+nomes = (
+    ('Xadrez', 'Branco', 'Preto'),
+    ('Jogo de Tabuleiro', 'Claro', 'Escuro'),
+    ('Chess', 'Black', 'White'),
+    ('Chess Game', 'Player 1', 'Player 2'),
+)
 config = {
     'quadrado': lambda c, i, j: cor(),
     'click': lambda c, i, j: cor(),

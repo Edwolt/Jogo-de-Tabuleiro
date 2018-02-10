@@ -1,10 +1,12 @@
+__author__ = 'Eduardo Souza Rocha'
+
 from random import randint as random
 
 del_cores = True
 
 
 def cor():
-    return [random(0, 255), random(0, 255), random(0, 255)]
+    return random(0, 255), random(0, 255), random(0, 255)
 
 
 def to_str(iterable):

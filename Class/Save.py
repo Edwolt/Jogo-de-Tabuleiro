@@ -2,23 +2,33 @@ import json
 
 
 class Save:
+    """Salva dados"""
+
     jogo = property()
 
     @jogo.setter
-    def jogo(self, value):
+    def jogo(self, value: str):
+        """
+        :param value: Nome do jogo
+        """
+
         self.path = f'Recursos/{value}/save.json'
 
     def __init__(self, jogo):
-        self.path = f'Recursos/{jogo}/save.json'
+        """
+        :param jogo: Nome do Jogo
+        """
+
+        self.path = f'Recursos/{jogo}/save.json'  # Caminho até o save
         self.dados = dict()
         self.keys = lambda: self.dados.keys()
 
-    def salvar(self, dados=None):
+    def salvar(self, **kwargs):
         file = open(self.path, 'w')
-        if dados:
-            json.dump(dados, file)
-        else:
+        if len(kwargs) == 0:
             json.dump(self.dados, file)
+        else:
+            json.dump(kwargs, file)
 
     def carregar(self):
         try:

@@ -1,15 +1,17 @@
+__author__ = 'Eduardo Souza Rocha'
+
 from random import randint as random
 
 del_cores = True
 
 cores = {
-    'branco': [random(0, 255), random(0, 255), random(0, 255)],
-    'preto': [random(0, 255), random(0, 255), random(0, 255)],
-    'click': [random(0, 255), random(0, 255), random(0, 255)],
-    'movimentopreto': [random(0, 255), random(0, 255), random(0, 255)],
-    'movimentobranco': [random(0, 255), random(0, 255), random(0, 255)],
-    'menu': [random(0, 255), random(0, 255), random(0, 255)],
-    'cor_fonte': [random(0, 255), random(0, 255), random(0, 255)]
+    'branco': (random(0, 255), random(0, 255), random(0, 255)),
+    'preto': (random(0, 255), random(0, 255), random(0, 255)),
+    'click': (random(0, 255), random(0, 255), random(0, 255)),
+    'movimentopreto': (random(0, 255), random(0, 255), random(0, 255)),
+    'movimentobranco': (random(0, 255), random(0, 255), random(0, 255)),
+    'menu': (random(0, 255), random(0, 255), random(0, 255)),
+    'cor_fonte': (random(0, 255), random(0, 255), random(0, 255))
 }
 
 config = {
