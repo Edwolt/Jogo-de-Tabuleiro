@@ -472,9 +472,7 @@ class Peao:
         if value:
             d = 1 if self.cor else -1  # Define a direção que esse Peao anda
             old_posicao, new_posicao = value
-            print(f'new_posicao == {new_posicao[0]}')
-            if old_posicao[0] == new_posicao[0] + 2 * d:  # Se o Peao tiver pulado duas casas # FIXME
-                print(f'new == {new_posicao[0]} e old = {old_posicao[0]}')
+            if old_posicao[0] == new_posicao[0] + 2 * d:  # Se o Peao tiver pulado duas casas
                 i, j = new_posicao[0] + d, new_posicao[1]  # Calcula posição pelo qual o Peao passou
                 self.__enpassant = old_posicao, (i, j), new_posicao
             else:  # Se o Peao não tiver pulado duas casas
@@ -565,7 +563,6 @@ class Peao:
                 # Se os Peaos estiverem um do lado do outro
                 if new_linha == linha and (new_coluna == coluna + 1 or new_coluna == coluna - 1):
                     pas_linha, pas_coluna = self.enpassant[1]  # Posicao por onde o Peao inimigo Passou
-                    print("enpassant é possivel")
                     res[pas_linha][pas_coluna] = True  # A casa que o Peao inimigo passou recebe True
 
         return res
