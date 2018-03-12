@@ -83,7 +83,6 @@ class Recursos:
         else:
             self.recursos = recursos
 
-    # retorna todos os caminhos necessarios
     def get_caminhos(self):
         """
         Retorne o caminho de todas as imgens na pasta Recursos/{jogo}
@@ -143,11 +142,11 @@ class GeradorRecursos(Recursos):
         :return: Imagem colorida
         """
 
-        paleta = self.gerar_paleta(cor1, cor2)  # Paleta é gerada
-        img_cor = numpy.zeros((img.shape[0], img.shape[1], 4))  # É criado uma imagem toda preta para ser modificada
+        paleta = self.gerar_paleta(cor1, cor2)
+        img_cor = numpy.zeros((img.shape[0], img.shape[1], 4))  # Imagem toda preta
         for i in range(img.shape[0]):
             for j in range(img.shape[1]):
-                pixel = img[i][j]  # pixel recebe o valor do pixel em i e j da imagem original
+                pixel = img[i][j]  # pixel na linha i e coluna j da imagem original
 
                 # Com paleta[pixel][0][0] o pixel de img_cor recebe um valor modificado de acordo com o valor de pixel
                 img_cor[i][j] = paleta[pixel][0][0].tolist() + [pixel[3]]  # pixel[3] pega o alpha da imagem original
@@ -172,8 +171,8 @@ execução
         """
         print(f'Cores Branco: {grad1}\nCores Preto: {grad2}\n')
 
-        for peca in nome_pecas():  # Para todas as Pecas
-            # Lê a imagem e salva em img - cv2.IMREAD_UNCHANGED faz com que seja reconhecido o alfa
+        for peca in nome_pecas():
+            # Lê a imagem - cv2.IMREAD_UNCHANGED faz com que seja reconhecido o alfa
             img = cv2.imread(f'Pacotes/{self.jogo}/Imagens/{self.pacote}/{peca}.png', cv2.IMREAD_UNCHANGED)
 
             branco = self.gerar_imagem(img, grad1[0], grad1[1])  # Gera a versão branca da peca

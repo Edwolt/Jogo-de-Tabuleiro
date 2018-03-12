@@ -456,8 +456,6 @@ class Peao:
     def enpassant(self) -> tuple:
         return self.__enpassant
 
-    # posicao = [linha, coluna]
-    # Retorna [posicao inicial, posicao por que passou, posicao final]
     @enpassant.setter
     def enpassant(self, value: tuple):
         """
@@ -488,7 +486,7 @@ class Peao:
 
         self.nome = 'Peao'
         self.cor = cor
-        self.nome_cor = '{}_{}'.format(self.nome, 'branco' if cor else 'preto')  # Usado no módulo Recurso
+        self.nome_cor = '{}_{}'.format(self.nome, 'branco' if cor else 'preto')
         self.__enpassant = None  # Valor property enpassant
         self.movimentou = movimentou
 

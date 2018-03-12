@@ -77,8 +77,8 @@ class Tela:
         :param pacote_config: Pacote de config que será utilizado
         """
 
-        pygame.init()  # Inicio do Pygame
-        self.screen = pygame.display.set_mode((size, size))  # Mostrando tela # TODO permitir mudar tamanho da tela
+        pygame.init()
+        self.screen = pygame.display.set_mode((size, size))  # TODO permitir mudar tamanho da tela
 
         self.xadrez = Xadrez()  # Aqui está tudo sobre o jogo
         self.recursos = Recursos('Xadrez', config=pacote_config)  # Aqui esta todas as imagens e configs
@@ -97,7 +97,7 @@ class Tela:
         # Cria um retangulo para ser usado em imagens
         self.rect = lambda: pygame.Rect((0, 0), (self.quad_size, self.quad_size))
 
-        # Com esse atributo que são acessadas as configs
+        # Com esse dict que são acessadas as configs
         self.__config = {
             'quadrado': lambda i, j: self.config['quadrado'](self.cores, i, j),
             'click': lambda i, j: self.config['click'](self.cores, i, j),
@@ -117,9 +117,9 @@ class Tela:
         self.__click = 0, 0
         self.blit_all()
 
-        self.main()  # Entra no main loop
+        self.main()
 
-    def main(self):
+    def main(self):  # Aqui o programa se orienta a eventos
         """execute um loop onde os eventos são verificados"""
 
         while True:
@@ -133,18 +133,20 @@ class Tela:
             if event.type == pygame.QUIT:  # Clicou no botão fechar
                 quit(0)
 
-            if event.type == pygame.KEYDOWN:  # Se alguma tecla tiver sido pressionada
-                if event.key == pygame.K_ESCAPE:  # Se a tecla pressionada for o Esc
+            if event.type == pygame.KEYDOWN:  # Pressionou alguma tecla
+                if event.key == pygame.K_ESCAPE:  # Pressionou o Esc
                     self.menu()  # O menu é exibido
 
-            if event.type == pygame.MOUSEBUTTONDOWN:  # Se houve um click do botão
-                self.__on_click(event)  # o metodo que verifica o clique é acionado
+            if event.type == pygame.MOUSEBUTTONDOWN:  # Se houve um click
+                self.__on_click(event)
 
             if event.type == pygame.VIDEORESIZE:  # TODO permitir mudar o tamanho da tela
                 pass
 
     def menu(self):
         """Exiba o menu"""
+
+        # TODO Salvar Configurações
 
         from Class.Recursos import all_configs, all_imagens
 
@@ -170,11 +172,13 @@ class Tela:
             self.screen.fill(self.__config['menu'](menus))  # Pinta a tela
             y = 0  # Espaço já utilizada
 
-            # TODO poderia exibir o menus assim Menu1 > Menu2 > Menu3
+            # TODO poderia exibir o menus assim Menu1 > Menu2 > Menu3 para ocupar menos espaço
             for nivel, i in enumerate(menus):  # Passa por todas os menus abertos exibindo-os
-                # Renderiza texto a ser exibido
+
+                # Exibe o texto
                 texto = self.__config['fonte'].render('  ' * nivel + i, 0, self.__config['cor_fonte'](menus))
-                self.screen.blit(texto, [0, y])  # Exibe o texto
+                self.screen.blit(texto, [0, y])
+
                 y += height  # Faz com que y fique abaixo do últmo item escrito
 
             for i, opcao in enumerate(opcoes):
@@ -189,9 +193,10 @@ class Tela:
                     else:  # Senão a pessoa quer começar outro jogo
                         texto = '  ' * nivel + ('> ' if opcoes[selecionado] == opcao else '  ') + 'Novo Jogo'
 
-                # Renderiza o Texto a ser Exibido
+                # Exibe o texto
                 reder_texto = self.__config['fonte'].render(texto, 0, self.__config['cor_fonte'](menus))
-                self.screen.blit(reder_texto, [0, y])  # Exibe o texto
+                self.screen.blit(reder_texto, [0, y])
+
                 y += height  # Faz com que y fique abaixo do últmo item escrito
 
             pygame.display.flip()
@@ -208,9 +213,11 @@ class Tela:
 
             # TODO poderia exibir o menus assim Menu1 > Menu2 > Menu3
             for nivel, i in enumerate(menus):  # Passa por todas os menus abertos exibindo-os
-                # Renderiza texto a ser exibido
+
+                # Exibe o texto
                 texto = self.__config['fonte'].render('  ' * nivel + i, 0, self.__config['cor_fonte'](menus))
-                self.screen.blit(texto, [0, y])  # Exibe o texto
+                self.screen.blit(texto, [0, y])
+
                 y += height  # Faz com que y fique abaixo do últmo item escrito
 
             for i, opcao in enumerate(opcoes):
@@ -219,9 +226,10 @@ class Tela:
                 else:
                     texto = '  ' * nivel + '  ' + opcao
 
-                    # Renderiza o Texto a ser Exibido
+                # Exibe o texto
                 reder_texto = self.__config['fonte'].render(texto, 0, self.__config['cor_fonte'](menus))
-                self.screen.blit(reder_texto, [0, y])  # Exibe o texto
+                self.screen.blit(reder_texto, [0, y])
+
                 y += height  # Faz com que y fique abaixo do últmo item escrito
 
             pygame.display.flip()
@@ -239,9 +247,10 @@ class Tela:
 
             # TODO poderia exibir o menus assim Menu1 > Menu2 > Menu3
             for nivel, i in enumerate(menus):  # Passa por todas os menus abertos exibindo-os
-                # Renderiza texto a ser exibido
+                # Exibe o texto
                 texto = self.__config['fonte'].render('  ' * nivel + i, 0, self.__config['cor_fonte'](menus))
-                self.screen.blit(texto, [0, y])  # Exibe o texto
+                self.screen.blit(texto, [0, y])
+
                 y += height  # Faz com que y fique abaixo do últmo item escrito
 
             for i, k in enumerate(opcoes):  # Se a opção tiver sido selecionada
@@ -250,71 +259,72 @@ class Tela:
                 else:
                     texto = '  ' * nivel + '  ' + k + str(opcoes[k])  # key: value
 
-                # Renderiza texto a ser exibido
+                # Exibe o texto
                 reder_texto = self.__config['fonte'].render(texto, 0, self.__config['cor_fonte'](menus))
-                self.screen.blit(reder_texto, [0, y])  # Exibe o texto
+                self.screen.blit(reder_texto, [0, y])
+
                 y += height  # Faz com que y fique abaixo do últmo item escrito
 
             pygame.display.flip()
 
-        escrever_opcoes()  # Anota as opções
+        escrever_opcoes()  # Exibe as opções
         while True:  # O menu tem eventos própios e por isso fica dentro de um while True
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:  # Clicou no botão fechar
                     quit(0)
-                if event.type == pygame.KEYDOWN:  # Se alguma tecla tiver sido pressionada
-                    if event.key == pygame.K_ESCAPE:  # Se a tecla pressionada for o Esc
-                        self.blit_all()  # Exibe o tabuleiro
-                        return  # Sai do loop e volta ao jogo
-                    if event.key == pygame.K_UP:  # Se a tecla pressionada for seta para cima
+                if event.type == pygame.KEYDOWN:  # Pressionou alguma tecla
+                    if event.key == pygame.K_ESCAPE:  # Pressionou Esc
+                        self.blit_all()
+                        return  # Sai do metodo
+                    if event.key == pygame.K_UP:  # Pressionou seta pra cima
                         if selecionado > 0:
                             selecionado -= 1  # O selecionador vai para cima
                             escrever_opcoes()  # Reexibe as opções para mostrar o novo item selecionado
                     if event.key == pygame.K_DOWN:  # Se a tecla pressionada for seta para baixo
                         if selecionado < len(opcoes) - 1:
                             selecionado += 1  # O selecionador vai para baixo
-                            escrever_opcoes()  # Reexibe as opções para mostrar o novo item selecionado
-                    if opcoes[selecionado] == 'Desfazer':  # Se a opção selecionada for de Desfazer
-                        if event.key == pygame.K_RIGHT:  # Se a tecla pressionada for seta para direita
+                            escrever_opcoes()
+                    if opcoes[selecionado] == 'Desfazer':
+                        if event.key == pygame.K_RIGHT:  # Pressionou seta para direita
                             if desfazer < limite_desfazer:
                                 desfazer += 1
                             else:  # Se desfazer chegou ou passou ao limite
                                 desfazer = 1  # Pois se fosse 0 continuaria sendo Novo Jogo
-                            escrever_opcoes()  # Reexibe as opções para mostrar as mudanças
-                        if event.key == pygame.K_LEFT:  # Se a tecla pressionada for seta para esquerda
+                            escrever_opcoes()
+                        if event.key == pygame.K_LEFT:  # Pressionou seta para esquerda
                             if desfazer > 0:
                                 desfazer -= 1
                             else:  # Se desfazer é 0 ou menos
                                 desfazer = limite_desfazer - 1  # Pois se fosse limite continuaria sendo Novo Jogo
-                            escrever_opcoes()  # Reexibe as opções para mostrar as mudanças
-                    if event.key == pygame.K_RETURN:  # Se a tecla pressionada for o Enter
+                            escrever_opcoes()
+                    if event.key == pygame.K_RETURN:  # Pressionou Enter
                         opcao = opcoes[selecionado]  # Opção selecionada
                         if opcao == 'Configs':
                             selecionado = 0
-                            configs = ['Default'] + all_configs('Xadrez') + ['Voltar']
+                            configs = ['Default'] + all_configs('Xadrez') + ['Voltar']  # Configs disponiveis
                             menus.append('Configs')
-                            escrever_opcoes1(configs)  # TODO Criar previews das caonfig
+                            escrever_opcoes1(configs)  # TODO Criar previews das config
 
-                            in_loop = True
-                            while in_loop:
+                            in_loop = True  # o 'while' precisa de variável, pois o 'for' não permite o uso do break
+                            while in_loop:  # Por ser outro menu, tem metodos própios, ficando dentro de um while
                                 for event in pygame.event.get():
-                                    if event.type == pygame.QUIT:
+                                    if event.type == pygame.QUIT:  # Clicou no botão fechar
                                         quit(0)
-                                    if event.type == pygame.KEYDOWN:
-                                        if event.key == pygame.K_ESCAPE:
+                                    if event.type == pygame.KEYDOWN:  # Pressionou alguma tecla
+                                        if event.key == pygame.K_ESCAPE:  # Pressionou Esc
                                             self.blit_all()
-                                            return
-                                        if event.key == pygame.K_UP:
+                                            return  # Sai do metodo
+                                        if event.key == pygame.K_UP:  # Pressionou seta pra cima
                                             if selecionado > 0:
                                                 selecionado -= 1
-                                                escrever_opcoes1(configs)  # TODO Criar previews das caonfig
-                                        if event.key == pygame.K_DOWN:
+                                                escrever_opcoes1(configs)  # TODO Criar previews das config
+                                        if event.key == pygame.K_DOWN:  # Pressionou seta pra baixo
                                             if selecionado < len(configs) - 1:
                                                 selecionado += 1
-                                                escrever_opcoes1(configs)  # TODO Criar previews das caonfig
-                                        if event.key == pygame.K_RETURN:
+                                                escrever_opcoes1(configs)  # TODO Criar previews das config
+                                        if event.key == pygame.K_RETURN:  # Pressionou Enter
                                             if selecionado == 0:
-                                                self.pacote_config = None
+                                                self.pacote_config = None  # Escolheu Default, a config será padrão
                                             elif selecionado < len(configs) - 1:
                                                 pacote = configs[selecionado]
                                                 self.pacote_config = pacote
@@ -323,36 +333,36 @@ class Tela:
                                             self.tabuleiro[i][j].fill(self.__config['click'](i, j))
                                             self.blit_all()
 
-                                            in_loop = False
+                                            in_loop = False  # Sai do loop, mas não do método
                             menus.pop()
                             selecionado = 0
-                            escrever_opcoes()
+                            escrever_opcoes()  # Exibe opções anteriores
 
                         elif opcao == 'Imagens':  # TODO Terminar imagens
                             selecionado = 0
-                            imagens = all_imagens('Xadrez')
-                            imagens.append('Voltar')
+                            imagens = all_imagens('Xadrez')  # Imagens disponiveis
+                            imagens.append('Voltar')  # Opção de voltar menu
                             menus.append('Imagens')
                             escrever_opcoes1(imagens)
 
-                            in_loop = True
-                            while in_loop:
+                            in_loop = True  # O 'while' precisa de variável, pois o 'for' não permite o uso do break
+                            while in_loop:  # Por ser outro menu, tem metodos própios, ficando dentro de um while
                                 for event in pygame.event.get():
-                                    if event.type == pygame.QUIT:
+                                    if event.type == pygame.QUIT:  # Clicou no botão fechar
                                         quit(0)
-                                    if event.type == pygame.KEYDOWN:
-                                        if event.key == pygame.K_ESCAPE:
+                                    if event.type == pygame.KEYDOWN:  # Pressionou alguma tecla
+                                        if event.key == pygame.K_ESCAPE:  # Pressionou Esc
                                             self.blit_all()
-                                            return
-                                        if event.key == pygame.K_UP:
+                                            return  # Sai do metodo
+                                        if event.key == pygame.K_UP:  # Pressionou seta pra cima
                                             if selecionado > 0:
                                                 selecionado -= 1
                                                 escrever_opcoes1(imagens)
-                                        if event.key == pygame.K_DOWN:
+                                        if event.key == pygame.K_DOWN:  # Pressionou seta pra baixo
                                             if selecionado < len(imagens) - 1:
                                                 selecionado += 1
                                                 escrever_opcoes1(imagens)
-                                        if event.key == pygame.K_RETURN:
+                                        if event.key == pygame.K_RETURN:  # Pressionou Enter
                                             if selecionado < len(imagens) - 1:
                                                 from Class.Recursos import GeradorRecursos
                                                 pacote = imagens[selecionado]
@@ -374,73 +384,86 @@ class Tela:
                                                 }
                                                 escrever_opcoes2(cores)  # TODO Criar previews das cores
                                                 menus.append('Cores')
-                                                in_loop1 = True
-                                                while in_loop1:
 
+                                                # O 'while' precisa de variável, pois o 'for' não pormite o uso do break
+                                                in_loop1 = True
+                                                while in_loop1:  # Por ser outro menu, tem while e metodos própios
                                                     for event in pygame.event.get():
-                                                        if event.type == pygame.QUIT:
+                                                        if event.type == pygame.QUIT:  # Clicou no botão fechar
                                                             quit(0)
-                                                        if event.type == pygame.KEYDOWN:
-                                                            if event.key == pygame.K_ESCAPE:
+                                                        if event.type == pygame.KEYDOWN:  # Pressionou alguma tecla
+                                                            if event.key == pygame.K_ESCAPE:  # Pressionou Esc
                                                                 self.blit_all()
                                                                 return
-                                                            if event.key == pygame.K_UP:
+                                                            if event.key == pygame.K_UP:  # Pressionou seta pra cima
                                                                 if selecionado > 0:
                                                                     selecionado -= 1
                                                                     # TODO Criar previews das cores
                                                                     escrever_opcoes2(cores)
-                                                            if event.key == pygame.K_DOWN:
+                                                            if event.key == pygame.K_DOWN:  # Pressionou seta pra baixo
                                                                 if selecionado < len(cores) - 1:
                                                                     selecionado += 1
                                                                     # TODO Criar previews das cores
                                                                     escrever_opcoes2(cores)
 
-                                                            if selecionado < len(opcoes) - 1:
-                                                                if event.key == pygame.K_RIGHT:
+                                                            if selecionado < len(opcoes) - 1:  # É uma cor
+                                                                if event.key == pygame.K_RIGHT:  # Seta pra direita
+                                                                    # Se valor da cor < 256:
                                                                     if cores[list(cores)[selecionado]] < 256:
                                                                         cores[list(cores)[selecionado]] += 1
                                                                         # TODO Criar previews das cores
                                                                         escrever_opcoes2(cores)
-                                                                if event.key == pygame.K_LEFT:
+                                                                if event.key == pygame.K_LEFT:  # Seta pra esquerda
+                                                                    # Se valor da cor > 0:
                                                                     if cores[list(cores)[selecionado]] > 0:
                                                                         cores[list(cores)[selecionado]] -= 1
                                                                         # TODO Criar previews das cores
                                                                         escrever_opcoes2(cores)
-                                                            if event.key == pygame.K_RETURN:
-                                                                if selecionado < len(cores) - 1:
+                                                            if event.key == pygame.K_RETURN:  # Pressionou Enter
+                                                                if selecionado == len(cores) - 1:  # Enter em aplicar
                                                                     pacote = configs[selecionado]
                                                                     self.pacote_config = pacote
+
+                                                                # Reexibe o tabulero com as novas configs
                                                                 self.recolorir_tabuleiro()
                                                                 i, j = self.__click
                                                                 self.tabuleiro[i][j].fill(self.__config['click'](i, j))
                                                                 self.blit_all()
 
-                                                                in_loop1 = False
+                                                                in_loop1 = False  # Sai do loop, mas não do método
                                                 menus.pop()
                                                 selecionado = 0
                                                 escrever_opcoes()
 
-                                                self.screen.fill(self.__config['menu'](menus))
+                                                self.screen.fill(self.__config['menu'](menus))  # Pinta a tela
+
+                                                # Conclusão da mudança da imagem
+
+                                                # Exibe texto 'Mudando Pacote'
+                                                w, h = self.__config['fonte'].size('Mudando Pacote')  # Tamanho Frase
+                                                meio_tela = self.quad_size * 4  # quad_size * 8 / 2 -> screen_size / 2
+                                                meio = meio_tela - w / 2, meio_tela - h / 2
                                                 texto = self.__config['fonte'].render(
                                                     'Mudando Pacote', 0, self.__config['cor_fonte'](menus)
                                                 )
-                                                w, h = self.__config['fonte'].size('Mudando Pacote')
-                                                meio_tela = self.quad_size * 4  # quad_size * 8 / 2 -> screen_size / 2
-                                                meio = meio_tela - w / 2, meio_tela - h / 2
                                                 self.screen.blit(texto, meio)
+
+                                                # Muda Recursos (Imagens)
                                                 pygame.display.flip()
                                                 atualizar = GeradorRecursos('Xadrez', pacote)
-                                                atualizar.gerar_recursos(
+                                                atualizar.gerar_recursos(  # TODO Mudar Valores de acordo com o user
                                                     [[245, 245, 245], [255, 255, 255]],
                                                     [[0, 0, 0, ], [10, 10, 10, ]]
                                                 )
                                                 self.recursos.get_recurso(return_value=False)
+
+                                            # Reexibe tabuleiro com as novas configurações
                                             self.recolorir_tabuleiro()
                                             i, j = self.__click
                                             self.tabuleiro[i][j].fill(self.__config['click'](i, j))
                                             self.blit_all()
 
-                                            in_loop = False
+                                            in_loop = False  # Sai do loop, mas não do método
                             menus.pop()
                             selecionado = 0
                             escrever_opcoes()
@@ -459,19 +482,24 @@ class Tela:
                             self.recolorir_tabuleiro()
                             i, j = self.__click
                             self.tabuleiro[i][j].fill(self.__config['click'](i, j))
+                            self.blit_all()  # TODO tirar um blit_all()
                             self.blit_all()
-                            self.blit_all()
-                            return
+                            return  # Sai do metodo
                         elif opcao == 'Voltar':
                             self.blit_all()
-                            return
+                            return  # Sai do metodo
                         elif opcao == 'Sair':
                             quit(0)
                         else:
                             raise Exception('Opcao nao encontrada')
 
     def __on_click(self, event):
-        if event.button == 1:
+        """
+        Faça a ação que o usuário solicitou com o clique
+
+        :param event: Evento de clique com informações sobre o clique
+        """
+        if event.button == 1:  # Clique do mouse com o botão esquerdo
 
             if self.__click[0] is None:
                 self.__on_click_promocao(event)
@@ -501,7 +529,7 @@ class Tela:
             elif aux == 'promocao':
                 self.__on_click_promocao_ecolha(event)
 
-        if event.button == 3:
+        if event.button == 3:  # Clique do mouse com o botão direito
             self.menu()
             pass
             # opções

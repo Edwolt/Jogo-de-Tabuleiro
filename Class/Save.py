@@ -19,7 +19,7 @@ class Save:
         :param jogo: Nome do Jogo
         """
 
-        self.path = f'Recursos/{jogo}/save.json'  # Caminho até o save
+        self.path = f'Save/{jogo}.json'  # Caminho até o save
         self.dados = dict()
         self.keys = lambda: self.dados.keys()
 
