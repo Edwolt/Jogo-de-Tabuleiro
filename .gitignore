@@ -1,4 +1,4 @@
 
 *.pyc
-*.png
 .idea/*
+Recursos/Xadrez/*.png
