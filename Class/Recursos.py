@@ -18,7 +18,7 @@ def all_configs(jogo: str) -> list:
     """
 
     import glob
-    return [i.split('\\')[1][:-3] for i in glob.glob(f'Pacotes/{jogo}/Config/*.py', )]
+    return [i.split('/')[-1][:-3] for i in glob.glob(f'Pacotes/{jogo}/Config/*.py')]
 
 
 def all_imagens(jogo: str) -> list:
@@ -62,9 +62,15 @@ class Recursos:
             import importlib
             self.__config = importlib.import_module(f'Pacotes.{self.jogo}.Config.{value}')
 
-    def __init__(self, jogo: str, config=None):
+    def __init__(self, jogo: str, config=None, get_recursos=True):
+        """
+        :param jogo: Define nome do jogo (pastas onde está tudo)
+        :param config: Define qual com Config começar
+        :param get_recursos: Define se precisa de capturar recursos (corrige erro de não ler Recursos)
+        """
         self.jogo = jogo
-        self.recursos = self.get_recurso()
+        if get_recursos:
+            self.recursos = self.get_recurso()
         self.__config = None  # Valor property config
         if config:
             import importlib
@@ -101,7 +107,7 @@ class GeradorRecursos(Recursos):
     """
 
     def __init__(self, jogo: str, pacote: str):
-        Recursos.__init__(self, jogo, None)
+        Recursos.__init__(self, jogo, None, False)
         self.pacote = pacote
         self.size = 512  # Tamanho das imagen geradas
 

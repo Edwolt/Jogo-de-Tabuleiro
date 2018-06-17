@@ -470,6 +470,7 @@ class Tela:
                             pass
 
                         elif opcao == 'Fontes':  # TODO Implementar fontes
+                            raise('precisa impĺementar')
                             self.fonte = 'Consolas.ttf'
                             pass
                         elif opcao == 'Desfazer':  # FIXME Desfazer promoção
