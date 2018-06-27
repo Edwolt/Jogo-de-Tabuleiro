@@ -1,7 +1,6 @@
-
-*.pyc
-.idea/*
+Versão Antiga/*
 Recursos/Xadrez/*.png
+.idea/*
 
 
 # Byte-compiled / optimized / DLL files
