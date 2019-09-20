@@ -1,7 +1,9 @@
 Versão Antiga/*
 Recursos/Xadrez/*.png
 .idea/*
-
+.directory
+*/.directory
+.git2/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
