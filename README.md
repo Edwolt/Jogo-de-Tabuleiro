@@ -1,6 +1,9 @@
 # Jogo de Tabuleiro
 É simplesmente um jogo de Xadrez feito em python
 
+![xadrez](images/Xadrez.png)
+![xadrez marrom](images/Xadrez_marrom.png)
+
 Antes de iniciar o jogo
 é nescessário que a pasta Recursos/Xadrez
 contenha as imagens das peças
