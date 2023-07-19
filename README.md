@@ -35,7 +35,7 @@ python3 RedefinirRecursos.py
 python3 Jogar.pyw
 ```
 
-# Funcionalidade
+# Funcionalidades
 - Movimentação
   - Movimentos das peças
   - Movimento especiais (roque e en passant)
