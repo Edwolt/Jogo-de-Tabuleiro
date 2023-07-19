@@ -1,4 +1,4 @@
-Refiz esse projeto [Jogo de tabuleiro](https://github.com/Edwolt/Jogo-de-Tabuleiro-2),
+Refiz esse projeto em [outro repositório](https://github.com/Edwolt/Jogo-de-Tabuleiro-2),
 para usar melhores técnicas de programação
 
 # Jogo de Tabuleiro
