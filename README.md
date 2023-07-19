@@ -7,12 +7,12 @@ para usar melhores técnicas de programação
 ![xadrez](images/Xadrez.png)
 ![xadrez marrom](images/Xadrez_marrom.png)
 
-Atenção: para rodar o porjeto é necessário atender as seguintes dependências
+Atenção: para executar é necessário atender as seguintes dependências
 * pygame
 * numpy
 * cv2
 
-Antes de iniciar o jogo
+Antes de executar o jogo
 é nescessário que a pasta Recursos/Xadrez
 contenha as imagens das peças
 com os nomes definidos nas classes em PecasXadrez.py
@@ -23,12 +23,12 @@ Para fazer isso crie a pasta onde serão salvas as imagens:
 mkdir Recursos/Xadrez
 ```
 
-Depois rode o script para criar as imagens:
+Depois execute o seguinte script para criar as imagens:
 ```sh
 python3 RedefinirRecursos.py
 ```
 
-Depois disso é possível iniciar o jogo com o comando:
+Depois disso é possível executar o jogo:
 ```sh
 python3 Jogar.pyw
 ```
