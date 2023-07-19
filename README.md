@@ -1,3 +1,6 @@
+Refiz esse projeto [Jogo de tabuleiro](https://github.com/Edwolt/Jogo-de-Tabuleiro-2),
+para usar melhores técnicas de programação
+
 # Jogo de Tabuleiro
 É simplesmente um jogo de Xadrez feito em python
 
